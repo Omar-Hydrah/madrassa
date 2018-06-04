@@ -1,51 +1,35 @@
-"use strict";
-module.exports = function(sequelize, DataTypes) {
-	return sequelize.define("course", {
-
-		course_id : {
-			type: DataTypes.INTEGER(11),
-			primaryKey : true,
-			autoIncrement: true,
-			allowNull: false,
-		}, 
-
+var Teacher = sequelize.define("teacher", {
 		teacher_id : {
-			type: DataTypes.INTEGER(11),
+			type : Sequelize.INTEGER(11),
+			primaryKey : true,
+			allowNull : false,
+			autoIncrement : true
+		},
+
+		user_id :{
+			type: Sequelize.INTEGER(11),
 			allowNull: false,
 			references: {
-				model: "teachers",
-				key: "teacher_id"
+				model :"users",
+				key: "user_id" 
 			}
 		},
 
-		title : {
-			type: DataTypes.STRING(50),
+		name : {
+			type: Sequelize.STRING(100),
 			allowNull: false,
-		},
-
-		description : {
-			type: DataTypes.TEXT,
+		}, 
+		email : {
+			type: Sequelize.STRING(100),
+			allowNull : true
 		},
 
 		created_at : {
-			type : DataTypes.DATE,
-			allowNull: false,
-			defaultValue: DataTypes.NOW
+			type: Sequelize.DATE,
+			allowNull : false,
+			defaultValue : Sequelize.NOW			
 		}
 	}, {
-		tableName : "courses",
-		timestamps: false,
-
-		// Relational columns
-		classMethods : {
-			associate: function(models) {
-				Course.hasOne(models.Teacher, {
-					foreignKey: "teacher_id",
-					onDelete : "CASCADE"
-				});
-				
-			}
-		}
+		tableName  : "teachers",
+		timestamps :false,
 	});
-
-};

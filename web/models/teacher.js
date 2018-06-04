@@ -1,12 +1,22 @@
 "use strict";
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define("teacher", {
+	var Teacher = sequelize.define("teacher", {
 		teacher_id : {
 			type : DataTypes.INTEGER(11),
 			primaryKey : true,
 			allowNull : false,
 			autoIncrement : true
 		},
+
+		user_id :{
+			type: DataTypes.INTEGER(11),
+			allowNull: false,
+			references: {
+				model :"users",
+				key: "user_id" 
+			}
+		},
+
 		name : {
 			type: DataTypes.STRING(100),
 			allowNull: false,
@@ -23,6 +33,14 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	}, {
 		tableName  : "teachers",
-		timestamps :false
+		timestamps :false,
+
+		/*classMethods: {
+			associate: function(models) {
+				Teacher.belongsTo(models.User)
+			}
+		}*/
 	});
+
+	return Teacher;
 };
