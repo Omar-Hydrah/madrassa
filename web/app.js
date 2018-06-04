@@ -6,6 +6,12 @@ var mongoose     = require("mongoose");
 var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 
+// Initials the mysql database using sequeqlize ORM.
+// Contains a reference to the intialized sequelize object.
+var sequelizeConfig = require("./conifg/sequelize-config.js");
+
+// Synchronizes the ORM with the database.
+sequelizeConfig.init();
 
 app.set("view engine", "ejs");
 app.use(express.static(path.resolve(__dirname, "public")));
