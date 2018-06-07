@@ -5,10 +5,10 @@ var morgan   = require("morgan");
 var flash    = require("connect-flash");
 var session  = require("express-session");
 var passport = require("passport");
-var bodyParser = require("body-parser");
+var bodyParser   = require("body-parser");
 var cookieParser = require("cookie-parser");
-// var mongoose  = require("mongoose");
 
+var middleware   = require("./middleware/index.js");
 
 var sessionStore = new session.MemoryStore();
 
@@ -49,14 +49,22 @@ app.use(passport.session());
 app.use(flash());
 
 // Application Routers:
-var authRouter = require("./routers/auth-router.js");
-var homeRouter = require("./routers/home-router.js");
+var authRouter    = require("./routers/auth-router.js");
+var homeRouter    = require("./routers/home-router.js");
+var profileRouter = require("./routers/profile-router.js");
 
 app.use("/auth", authRouter);
-app.use("/home", homeRouter);
+// Protected routes:
+app.use("/home",    middleware.isLoggedIn, homeRouter);
+app.use("/profile", middleware.isLoggedIn, profileRouter);
 
 app.get("/", (req, res)=>{
-	res.send("Welcome to our website.");
+	res.send(`Welcome to our website.
+		<br />
+		<a href="/auth/login">Login</a>
+		<br />
+		<a href="/auth/register">Register</a>
+		`);
 });
 
 app.get("*", (req, res)=>{

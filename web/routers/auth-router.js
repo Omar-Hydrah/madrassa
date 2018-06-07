@@ -25,7 +25,7 @@ function createSession(req){
 			role    : user.role,
 			createdAt: moment(user.created_at).format("DD-MM-YYYY"),
 		}
-		console.log("Session: ", req.session.user);
+		// console.log("Session: ", req.session.user);
 		
 	}
 }

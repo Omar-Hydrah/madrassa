@@ -6,7 +6,6 @@ var User      = sequelize.import("../models/user.js");
 
 // Database queries must send the "raw" option, to have user.user_id
 passport.serializeUser(function(user, done) {
-	// console.log(user.get({plain: true}));
 	
 	return done(null, user.user_id);
 });
@@ -33,10 +32,10 @@ var loginStrategy = new LocalStrategy({
 		where: {
 			username: username
 		}, 
+		// Setting 'raw : true', hides the verifyPassword() method.
 		// raw: true
 
 	}).then((user)=>{
-		// console.log("User", user);
 
 		if(!user || !user.verifyPassword(password)){
 
@@ -86,8 +85,6 @@ var registerStrategy = new LocalStrategy({
 				req.flash("registerMessage", "Unknown user creation error"));
 
 		}else{
-			// console.log(user.get("username"));
-			// console.log(user.get("password"));
 
 			return done(null, user);
 			// To send plain user data:
@@ -111,14 +108,7 @@ var registerStrategy = new LocalStrategy({
 
 	    }
 		
-		// console.log(Object.keys(err));
-		// console.log(err.errors);
-		// console.log(err.fields);
-		// console.log(err.name);
-		// console.log("Unknown error");
-
-		// req.flash("registerMessage", "Unknown error occured");
-		throw err;
+		// throw err;
 		return done(null, false, 
 			req.flash("registerMessage", "Unknown Registeration Error"));
 	});

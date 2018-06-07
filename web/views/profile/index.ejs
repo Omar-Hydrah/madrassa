@@ -1,0 +1,24 @@
+<% include ../partials/header.ejs %>
+<a href="/home">Home</a>
+<br />
+
+
+<p>Welcome <%= user.username %></p>
+<% if(user.role == null){ %>
+	<p>Your role has not been defined</p>
+	<p>Please set your profile type:</p>
+	<form action="/profile/set-role" method="post">
+		<select name="userRole" >
+			<option value="none">None</option>
+			<option value="teacher">Teacher</option>
+			<option value="student">Student</option>
+		</select>
+		<input type="submit" name="submit" value="Set role" />
+	</form>
+	<br />
+<% }else{ %>
+	<p>You are a <%= user.role %></p>
+<% } %>
+
+
+<% include ../partials/footer.ejs %>
