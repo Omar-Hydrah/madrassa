@@ -1,0 +1,32 @@
+<% include ../partials/header.ejs %>
+
+<form action="/auth/register" method="post" >
+		
+	<label>Username: </label>	
+	<input type="text" name="username" placeholder="username" />
+	<br />
+
+	<label>Password: </label>
+	<input type="password" name="password" placeholder="password" />
+	<br />
+
+	<label>Account type:</label>
+	<select>
+		<option value="none">None</option>
+		<option value="teacher">Teacher</option>
+		<option value="student">Student</option>
+	</select>
+	<br />
+
+	<input type="submit" name="submit" value="Register" />
+
+</form>
+
+<% // $err must be a string  %>
+<% if(err != null){ %>
+	<p style="color:red;"><%= err %></p>
+<% } %>
+
+<br /><br />
+<a href="/auth/login">Login</a>
+<% include ../partials/footer.ejs %>

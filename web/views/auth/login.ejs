@@ -1,0 +1,22 @@
+<% include ../partials/header.ejs %>
+<form action="/auth/login" method="post" >
+	<label>Username: </label>
+	<input type="text" name="username" placeholder="username" />
+	<br />
+	<label>Password: </label>
+	<input type="password" name="password" placeholder="password" />
+	<br />
+
+	<input type="submit" name="submit" value="Login" />
+</form>
+
+<% // $err must be a string %>
+<% if(err){ %>
+
+	<p style="color:red;"><%= err %></p>
+<% } %>
+
+<br /><br />
+<a href="/auth/register">Register</a>
+
+<% include ../partials/footer.ejs %>

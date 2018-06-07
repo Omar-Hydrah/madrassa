@@ -4,8 +4,10 @@ var sequelize = new Sequelize(
 	process.env.db_username, 
 	process.env.db_password, 
 	{
+		host      : "localhost",
+		dialect   : "mysql",
+		logging   : true,
 		operatorsAliases: false,
-		logging: true
 });
 
 
