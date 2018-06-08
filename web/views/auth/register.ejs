@@ -11,7 +11,7 @@
 	<br />
 
 	<label>Account type:</label>
-	<select>
+	<select name="role">
 		<option value="none">None</option>
 		<option value="teacher">Teacher</option>
 		<option value="student">Student</option>
@@ -22,9 +22,13 @@
 
 </form>
 
-<% // $err must be a string  %>
-<% if(err != null){ %>
-	<p style="color:red;"><%= err %></p>
+<% // $errors must be an array  %>
+<% if(errors != null){ %>
+	<% for(var i = 0; i < errors.length; i++){ %>
+
+		<p style="color:red;"><%= errors[i]; %></p>
+
+	<% } %>
 <% } %>
 
 <br /><br />

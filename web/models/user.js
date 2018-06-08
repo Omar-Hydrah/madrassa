@@ -5,8 +5,8 @@ module.exports = function(sequelize, DataTypes) {
 	var User = sequelize.define("user", {
 		user_id :{
 			type: DataTypes.INTEGER(11),
-			// allowNull: false,
-			// autoIncrement : true,
+			allowNull: false,
+			autoIncrement : true,
 			primaryKey :true
 		}, 
 		username : {
@@ -22,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
 
 		role : {
 			type: DataTypes.ENUM("admin", "teacher", "student"),
+			allowNull: false
 		}, 
 
 		created_at : {
@@ -31,6 +32,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	}, {
 		tableName: "users",
+		// omitNull: true,
 		timestamps: false
 	});
 

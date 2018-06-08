@@ -12,7 +12,6 @@ function createSession(req){
 	if(!req.user){
 		return;
 	}
-	// console.log(req.user.get({plain:true}));
 
 	// TODO: Make sure that the user variable can access the database
 	// values. Errors can arise if the user doesn't contain the $get() function
@@ -25,7 +24,6 @@ function createSession(req){
 			role    : user.role,
 			createdAt: moment(user.created_at).format("DD-MM-YYYY"),
 		}
-		// console.log("Session: ", req.session.user);
 		
 	}
 }
@@ -63,15 +61,17 @@ router.post("/login", loginMiddleware, (req, res)=>{
 });
 
 router.get("/register", middleware.isNotLoggedIn, (req, res)=>{
-	
-	var registerMessage = req.flash("registerMessage"); 
-	if(registerMessage.length){
-		return res.render("auth/register", {err: registerMessage});
+	console.log("User trying to register");
+
+	var errors = req.flash("registerMessage"); 
+
+	if(errors != null && errors.length != 0){
+		return res.render("auth/register", {errors: errors});
 		// console.log("Register Error");
 	}
 
 	
-	res.render("auth/register", {err: null});
+	res.render("auth/register", {errors: null});
 });
 
 router.post("/register", registerMiddleware, (req, res)=>{
