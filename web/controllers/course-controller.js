@@ -1,4 +1,4 @@
-var sequelize = require("../config/sequelize-config.js");
+var sequelize = require("../config/sequelize-config.js").sequelize;
 
 
 var CourseController = {};
