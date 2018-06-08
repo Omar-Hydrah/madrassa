@@ -57,7 +57,11 @@ router.get("/login", middleware.isNotLoggedIn,  (req, res)=>{
 router.post("/login", loginMiddleware, (req, res)=>{
 
 	createSession(req);
-	res.redirect("/home");
+	if(req.session.user.role == "admin"){
+		res.redirect("/profile/admin");
+	}else{
+		res.redirect("/home");
+	}
 });
 
 router.get("/register", middleware.isNotLoggedIn, (req, res)=>{
@@ -77,6 +81,7 @@ router.get("/register", middleware.isNotLoggedIn, (req, res)=>{
 router.post("/register", registerMiddleware, (req, res)=>{
 	createSession(req);
 	res.redirect("/home");
+
 });
 
 router.get("/logout", (req, res)=>{

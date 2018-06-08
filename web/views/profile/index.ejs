@@ -5,19 +5,12 @@
 
 <p>Welcome <%= user.username %></p>
 <% if(user.role == null){ %>
-	<p>Your role has not been defined</p>
-	<p>Please set your profile type:</p>
-	<form action="/profile/set-role" method="post">
-		<select name="userRole" >
-			<option value="none">None</option>
-			<option value="teacher">Teacher</option>
-			<option value="student">Student</option>
-		</select>
-		<input type="submit" name="submit" value="Set role" />
-	</form>
-	<br />
-<% }else{ %>
-	<p>You are a <%= user.role %></p>
+	<p>Your role (teacher/student) has not been defined. Nothing to view here</p>
+
+<% }else if(user.role == "teacher"){ %>
+	<p>You are a teacher</p>
+<% }else if(user.role == "student"){ %>
+	<p>You are a student</p>
 <% } %>
 
 
