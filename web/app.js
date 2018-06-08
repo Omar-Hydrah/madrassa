@@ -59,12 +59,7 @@ app.use("/home",    middleware.isLoggedIn, homeRouter);
 app.use("/profile", middleware.isLoggedIn, profileRouter);
 
 app.get("/", (req, res)=>{
-	res.send(`Welcome to our website.
-		<br />
-		<a href="/auth/login">Login</a>
-		<br />
-		<a href="/auth/register">Register</a>
-		`);
+	res.render("index");
 });
 
 app.get("*", (req, res)=>{
