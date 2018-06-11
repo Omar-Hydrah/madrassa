@@ -1,0 +1,13 @@
+<% include ../partials/header.ejs %>
+
+<% if(course != null){ %>
+	<h3><%= course.title %> (<%= course.year %>)- by <%= course.teacher %></h3>
+	<p>Description:</p>
+	<p><%= course.description %></p>
+<% } %>
+
+<% if(message != null){ %>
+	<p style="color:red;"><%= message %></p>
+<% } %>
+
+<% include ../partials/footer.ejs %>

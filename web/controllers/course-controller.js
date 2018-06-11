@@ -47,7 +47,7 @@ CourseController.allCourses = function() {
 	return new Promise((resolve, reject)=>{
 
 		Course.findAll({raw: true}).then((courses)=>{
-			resolve(courses);	
+			resolve(courses);
 		}).catch((err)=>{
 			reject(courses);
 		});
@@ -57,7 +57,7 @@ CourseController.allCourses = function() {
 CourseController.getCoursesDetails = function() {
 	/*
 	select 
-	c.teacher_id, c.course_id, c.title, c.description, 
+	c.course_id, c.title, c.description, 
 		date_format(c.created_at, "%Y") as year, 
 	concat(users.first_name, " ", users.last_name) as name
 	from courses c 
@@ -76,5 +76,36 @@ CourseController.getCoursesDetails = function() {
 		});
 	});
 }
+
+CourseController.getCourse = function(courseId) {
+	return new Promise((resolve, reject)=>{
+		var query = "select c.course_id, c.teacher_id, c.title, c.description, "; 
+		query += " date_format(c.created_at, '%Y') as year,";
+		query += " concat(users.first_name, ' ', users.last_name) as teacher";
+		query += " from courses c left join users "; 
+		query += " on c.teacher_id = users.user_id where course_id = ? limit 1";
+
+		sequelize.query(query, {replacements: [courseId]})
+			.spread((result)=>{
+				if(!result){
+					reject(new Error("Course not found"));
+				}
+				resolve(result);
+			});
+
+		/*Course.findById(courseId, {raw: true})
+			.then((course)=>{
+				if(!course){
+					reject(new Error("Course not found"));
+				}else{
+					resolve(course);
+				}
+
+			}).catch((err)=>{
+				// throw err;
+				reject(course);
+			});*/
+	});
+};
 
 module.exports = CourseController;

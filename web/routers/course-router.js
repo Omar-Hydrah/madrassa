@@ -2,8 +2,9 @@ var router    = require("express").Router();
 var sequelize = require("../config/sequelize-config.js").sequelize;
 var Course    = sequelize.import("../models/course.js");
 var CourseController = require("../controllers/course-controller.js");
+var middleware = require("../middleware/index.js");
 
-router.get("/create-course", (req, res)=>{
+router.get("/create-course", middleware.isLoggedIn, (req, res)=>{
 	res.render("course/create-course");
 });
 
@@ -11,19 +12,12 @@ router.get("/create-course", (req, res)=>{
 // either failing or succeeding in creating a course. 
 // req.flash() is used to send messages.
 
-router.post("/create-course", (req, res)=>{
+router.post("/create-course", middleware.isLoggedIn, (req, res)=>{
 	// var user = req.session.user;
 
-	/*var response = {
-		message: "",
-		error  : false
-	}; */
-
 	if(!req.session.user || !req.session.user.userId){
-		// response.error = true;
-		// response.message = "No teacher found";
 		req.flash("courseMessage", "No teacher found");
-		// return res.json(response);
+
 		return res.redirect("/course/all");
 
 	}else{
@@ -62,7 +56,6 @@ router.get("/all", (req, res)=>{
     // year: '2018',
     // teacher: 'Hassan Ahmad' }
 
-	// CourseController.allCourses()
 	CourseController.getCoursesDetails()
 		.then((courses)=>{
 			res.render("course/index", {
@@ -74,6 +67,23 @@ router.get("/all", (req, res)=>{
 			// TODO: Must inspect further. How might this fail?
 			req.flash("courseError", "Unable to get all courses");
 			return res.redirect("/home");
+		});
+});
+
+router.get("/:courseId", (req, res)=>{
+	CourseController.getCourse(req.params.courseId)
+		.then((course)=>{
+			console.log(course[0]);
+			// Returned course is an array.
+			res.render("course/course", {
+				course: course[0],
+				message: null
+			})
+		}).catch((err)=>{
+			res.render("course/course", {
+				course: null,
+				message: err
+			})
 		});
 });
 

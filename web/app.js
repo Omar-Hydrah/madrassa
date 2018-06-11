@@ -58,7 +58,7 @@ app.use("/auth", authRouter);
 // Protected routes:
 app.use("/home",    middleware.isLoggedIn, homeRouter);
 app.use("/profile", middleware.isLoggedIn, profileRouter);
-app.use("/course", middleware.isLoggedIn, courseRouter);
+app.use("/course", courseRouter);
 
 app.get("/", (req, res)=>{
 	res.render("index");
