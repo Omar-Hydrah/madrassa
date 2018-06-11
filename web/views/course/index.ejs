@@ -1,0 +1,18 @@
+<% include ../partials/header.ejs %>
+
+<p>A list of all of our courses</p>
+<% if(courses != null){ %>
+	<ul>
+	<% for(var i = 0; i < courses.length; i++){ %>
+		<li><%= courses[i].title %> : <%= courses[i].description %></li>
+	<% } %>
+	</ul>
+<% } %>
+
+
+<% if(message != null){ %>
+	<p style="color:red;"><%= message %></p>
+<% } %>
+
+
+<% include ../partials/footer.ejs %>

@@ -9,8 +9,12 @@
 
 <% }else if(user.role == "teacher"){ %>
 	<p>You are a teacher</p>
+	<a href="/course/create-course">Create a new course</a>
+	<br />
+	<a href="/course/all">View all courses</a>
 <% }else if(user.role == "student"){ %>
 	<p>You are a student</p>
+	<a href="/course/all">View all courses</a>
 <% } %>
 
 

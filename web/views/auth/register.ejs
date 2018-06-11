@@ -1,17 +1,30 @@
 <% include ../partials/header.ejs %>
+<style type="text/css">
+	input{
+		margin-bottom:10px;
+	}
+</style>
 
 <form action="/auth/register" method="post" >
 		
 	<label>Username: </label>	
-	<input type="text" name="username" placeholder="username" />
+	<input type="text" name="username" placeholder="username" required="true" />
 	<br />
 
 	<label>Password: </label>
-	<input type="password" name="password" placeholder="password" />
+	<input type="password" name="password" placeholder="password" required="true"/>
+	<br />
+
+	<label>First Name: </label>
+	<input type="text" name="firstName" placeholder="First Name" />
+	<br />
+
+	<label>Last Name: </label>
+	<input type="text" name="lastName" placeholder="Last Name" />
 	<br />
 
 	<label>Account type:</label>
-	<select name="role">
+	<select name="role" >
 		<option value="none">None</option>
 		<option value="teacher">Teacher</option>
 		<option value="student">Student</option>

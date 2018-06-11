@@ -20,6 +20,16 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false
 		}, 
 
+		first_name : {
+			type: DataTypes.STRING(20),
+			allowNull: true
+		},
+
+		last_name: {
+			type: DataTypes.STRING(20),
+			allowNull: true
+		},
+
 		role : {
 			type: DataTypes.ENUM("admin", "teacher", "student"),
 			allowNull: false

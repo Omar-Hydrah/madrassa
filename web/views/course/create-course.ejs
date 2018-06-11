@@ -1,0 +1,17 @@
+<% include ../partials/header.ejs %>
+
+<form action="/course/create-course" method="post">
+	<label>Course Title</label>
+	<input type="text" name="title" placeholder="Course Title" required="true" />
+	<br />
+	<label>Course Description</label>
+	<br />
+	<textarea name="description" 
+	style="width:400px;height:200px;font-size:20px;resize:none;" 
+	required="true"></textarea>
+
+	<br />
+	<input type="submit" name="submit" value="submit" />
+</form>
+
+<% include ../partials/footer.ejs %>

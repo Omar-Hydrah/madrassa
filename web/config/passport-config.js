@@ -96,12 +96,14 @@ var registerStrategy = new LocalStrategy({
 	}
 
 	User.create({	
-		username: username, 
-		password: User.hashPassword(password),
+		username  : username, 
+		password  : User.hashPassword(password),
+		first_name: req.body.firstName,
+		last_name : req.body.lastName,
 		role    : req.body.role
 
 	}, {
-		fields: ["username", "password", "role"]
+		fields: ["username", "password", "first_name", "last_name", "role"]
 	}).then((user)=>{
 			
 		if(!user){

@@ -1,35 +1,41 @@
-var Teacher = sequelize.define("teacher", {
-		teacher_id : {
-			type : Sequelize.INTEGER(11),
-			primaryKey : true,
-			allowNull : false,
-			autoIncrement : true
-		},
+"use strict";
+module.exports = function(sequelize, DataTypes) {
 
-		user_id :{
-			type: Sequelize.INTEGER(11),
-			allowNull: false,
-			references: {
-				model :"users",
-				key: "user_id" 
+	var Course = sequelize.define("course", {
+			course_id : {
+				type : DataTypes.INTEGER(11),
+				primaryKey : true,
+				allowNull : false,
+				autoIncrement : true
+			},
+
+			teacher_id :{
+				type: DataTypes.INTEGER(11),
+				allowNull: false,
+				references: {
+					model :"users",
+					key: "user_id" 
+				}
+			},
+
+			title : {
+				type: DataTypes.STRING(50),
+				allowNull: false,
+			}, 
+			description : {
+				type: DataTypes.TEXT,
+				allowNull : true
+			},
+
+			created_at : {
+				type: DataTypes.DATE,
+				allowNull : false,
+				defaultValue : DataTypes.NOW			
 			}
-		},
-
-		name : {
-			type: Sequelize.STRING(100),
-			allowNull: false,
-		}, 
-		email : {
-			type: Sequelize.STRING(100),
-			allowNull : true
-		},
-
-		created_at : {
-			type: Sequelize.DATE,
-			allowNull : false,
-			defaultValue : Sequelize.NOW			
-		}
-	}, {
-		tableName  : "teachers",
-		timestamps :false,
-	});
+		}, {
+			tableName  : "courses",
+			timestamps :false,
+		});
+	
+	return Course;
+}
