@@ -1,12 +1,53 @@
 <% include ../partials/header.ejs %>
+<style type="text/css">
+	table{
+		border-collapse:collapse;
+		width:100%;
+	}
+	th, td{
+		border: 1px solid black;
+		padding:10px;
+		text-align:left;
+	}
+	th,td{
+
+	}
+</style>
 
 <p>A list of all of our courses</p>
 <% if(courses != null){ %>
-	<ul>
-	<% for(var i = 0; i < courses.length; i++){ %>
-		<li><%= courses[i].title %> : <%= courses[i].description %></li>
-	<% } %>
-	</ul>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Course</th>
+				<th>Teacher</th>
+				<th>Description</th>
+				<th>Year</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<!-- <tr>
+				<td>Chemistry</td>
+				<td>Omar Mohammad</td>
+				<td>An introduction to chemistry</td>
+				<td>2018</td>
+			</tr> -->
+			<% for(var i = 0; i < courses.length; i++){ %>
+				<tr>
+					<td>
+						<a href="/course/<%= courses[i].course_id %>">
+							<%= courses[i].title %></a>
+					</td>
+					<td><%= courses[i].teacher %></td>
+					<td><%= courses[i].description %></td>
+					<td><%= courses[i].year %></td>
+				</tr>
+			<% } %>
+
+		</tbody>
+	</table>
 <% } %>
 
 

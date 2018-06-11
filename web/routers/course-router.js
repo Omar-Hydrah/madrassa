@@ -57,14 +57,13 @@ router.get("/all", (req, res)=>{
 	// console.log("courseMessage", courseMessage);
 	// Sample data from CourseController.getCoursesDetails:
 	// TextRow {
-    // teacher_id: 13,
-    // course_id: 4,
     // title: 'Physics',
     // description: 'An introduction to classic physics.',
     // year: '2018',
-    // name: 'Hassan Ahmad' }
+    // teacher: 'Hassan Ahmad' }
 
-	CourseController.allCourses()
+	// CourseController.allCourses()
+	CourseController.getCoursesDetails()
 		.then((courses)=>{
 			res.render("course/index", {
 				message: courseMessage,
