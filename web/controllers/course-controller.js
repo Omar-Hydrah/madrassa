@@ -1,10 +1,12 @@
 var sequelize = require("../config/sequelize-config.js").sequelize;
 var User      = sequelize.import("../models/user.js");
 var Course    = sequelize.import("../models/course.js");
+var CourseStudent = sequelize.import("../models/course-student.js");
 
 
 var CourseController = {};
 
+// The user must have a role of a teacher
 CourseController.createCourse = function(userId, title, description) {
 
 	return new Promise((resolve, reject)=>{
@@ -43,6 +45,52 @@ CourseController.createCourse = function(userId, title, description) {
 	});
 }
 
+// The user must have a role of a student.
+// Should insert in `course_students` table.
+CourseController.joinCourse = function(userId, courseId) {
+
+	return new Promise((resolve, reject)=>{
+		var query = "select user_id from users "; 
+		query += " where user_id = ? and role = 'student'";
+		query += " union all select course_id from courses where course_id = ?";
+		sequelize.query(query, {replacements: [userId, courseId]})
+			.spread((result)=>{
+				console.log(result);
+				if(result.length != 2){
+					// Either course or user was not found.
+
+					var error = "The user is not a student,"; 
+					error += " or course cannot be found";
+					reject(new Error(error));
+					console.log(error);
+
+				// }else if(result[0].user_id == userId 
+				// 	&& result[1].course_id == courseId)
+				// {
+
+				}else{
+					// reject(new Error("Unknown error"));
+					// sequelize.query("insert int")
+					CourseStudent.create({
+						student_id: userId, 
+						course_id: courseId
+					}, {
+						raw: true
+					}).then((courseStudent)=>{
+						console.log(courseStudent.get({plain:true}));
+						resolve(courseStudent);
+					}).catch((err)=>{
+						console.log(err);
+						reject(err);
+					});
+					console.log("Registering a new user.");
+				}
+			});
+		
+	});
+
+};
+
 CourseController.allCourses = function() {
 	return new Promise((resolve, reject)=>{
 
@@ -52,7 +100,7 @@ CourseController.allCourses = function() {
 			reject(courses);
 		});
 	});
-}
+};
 
 CourseController.getCoursesDetails = function() {
 	/*
