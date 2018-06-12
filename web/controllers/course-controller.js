@@ -47,7 +47,7 @@ CourseController.createCourse = function(userId, title, description) {
 
 // The user must have a role of a student.
 // Should insert in `course_students` table.
-CourseController.joinCourse = function(userId, courseId) {
+CourseController.joinCourse = function(courseId, userId) {
 
 	return new Promise((resolve, reject)=>{
 		var query = "select user_id from users "; 
@@ -80,10 +80,10 @@ CourseController.joinCourse = function(userId, courseId) {
 						console.log(courseStudent.get({plain:true}));
 						resolve(courseStudent);
 					}).catch((err)=>{
-						console.log(err);
+						console.log(err.name);
 						reject(err);
 					});
-					console.log("Registering a new user.");
+					// console.log("Registering a new user.");
 				}
 			});
 		

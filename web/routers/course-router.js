@@ -42,13 +42,46 @@ router.post("/create-course", middleware.isLoggedIn, (req, res)=>{
 
 });
 
+router.get("/:courseId/join-course/", middleware.isLoggedIn, (req, res)=>{
+	if(!req.session.user || !req.session.user.userId){
+		req.flash("courseMessage", "Unable to join course. Student not found");
+
+		return res.redirect("/course/all");
+	}else{
+		CourseController.joinCourse(
+			req.params.courseId, req.session.user.userId)
+			.then((courseStudent)=>{
+				if(!courseStudent){
+					req.flash("courseMessage", "Failed to join course");
+					return res.redirect("/course/all");
+				}else{
+					req.flash("courseMessage", "Student joined course");
+					return res.redirect("/course/all");
+				}
+			}).catch((err)=>{
+				// The user has already joined the course.
+				if(err.name == "SequelizeUniqueConstraintError"){
+					req.flash("courseMessage", 
+						"You are already registered in this course");
+					return res.redirect("/course/all");
+				}
+
+				req.flash("courseMessage", err.name);
+				console.log(err.name);
+				return res.redirect("/course/all");
+				// console.log(Object.keys(err));
+
+			});
+
+	}
+});
+
 router.get("/all", (req, res)=>{
 
 	// If there's a redirection from `course/create-course`, 
 	// then there should be a courseMessage flash. 
 
 	var courseMessage = req.flash("courseMessage");
-	// console.log("courseMessage", courseMessage);
 	// Sample data from CourseController.getCoursesDetails:
 	// TextRow {
     // title: 'Physics',
@@ -73,7 +106,7 @@ router.get("/all", (req, res)=>{
 router.get("/:courseId", (req, res)=>{
 	CourseController.getCourse(req.params.courseId)
 		.then((course)=>{
-			console.log(course[0]);
+			// console.log(course[0]);
 			// Returned course is an array.
 			res.render("course/course", {
 				course: course[0],
