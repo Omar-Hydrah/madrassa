@@ -122,29 +122,45 @@ router.get("/:courseId", (req, res)=>{
 		.then((course)=>{
 			// Returned course is an array.
 			// console.log(course[0]);
-		
+			
 			// Fetching the students registered to this course.
 			CourseController.getCourseStudents(course[0].course_id)
 				.then((students)=>{
 					// console.log(students);
 					
+					// To prevent a user from joining a course twice.
+					var userJoinedCourse = false;
+					if(req.session.user != null){
+						for(var i = 0; i < students.length; i++){
+							if(students[i].student_id == req.session.user.userId){
+								userJoinedCourse = true;
+							}
+						}					
+					}
+
 					res.render("course/course", {
 						course: course[0],
 						students: students,
+						// if a user joined, don't display the link.
+						displayJoinLink: !userJoinedCourse,
 						message: null
 				});
 					
+				// Failed to get students.
 				}).catch((err)=>{
 					res.render("course/course", {
 						course: null,
 						students: null,
+						displayJoinLink: false,
 						message: err
 					});
 				});
+		// Failed to get course data.						
 		}).catch((err)=>{
 			res.render("course/course", {
 				course: null,
 				students: null,
+				displayJoinLink: false,
 				message: err
 			});
 		});
