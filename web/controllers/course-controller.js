@@ -135,7 +135,7 @@ CourseController.getCourse = function(courseId) {
 
 		sequelize.query(query, {replacements: [courseId]})
 			.spread((result)=>{
-				if(!result){
+				if(!result || result.length == 0){
 					reject(new Error("Course not found"));
 				}
 				resolve(result);
@@ -155,5 +155,41 @@ CourseController.getCourse = function(courseId) {
 			});*/
 	});
 };
+
+// select 
+// cs.student_id, cs.course_id, 
+// concat(u.first_name, ' ', u.last_name) as name, c.title 
+// from course_students cs 
+// 	left join courses c on c.course_id = cs.course_id 
+// 	left join users u on cs.student_id = u.user_id 
+// 	where cs.course_id = 5;
+
+CourseController.getCourseStudents = function(courseId) {
+	return new Promise((resolve, reject)=>{
+		var query = "select cs.student_id, cs.course_id, ";
+		query += " concat(u.first_name, ' ', u.last_name) as name, c.title";
+		query += " from course_students cs";
+		query += " left join courses c on c.course_id = cs.course_id";
+		query += " left join users u on cs.student_id = u.user_id";
+		query += " where cs.course_id = ?";
+
+		// @Result:
+		// TextRow {
+	    // student_id: 24,
+	    // course_id: 6,
+	    // name: 'ayman mohammad',
+	    // title: 'Philosophy' }
+		sequelize.query(query, {replacements: [courseId]})
+			.spread((result)=>{
+				if(!result || result.length == 0){
+					reject(new Error("Course not found"));
+				}else{
+					resolve(result);
+				}
+			});
+		
+	});
+};
+
 
 module.exports = CourseController;

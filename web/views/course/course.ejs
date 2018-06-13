@@ -5,6 +5,18 @@
 	<a href="/course/<%= course.course_id %>/join-course">Join course</a>
 	<p>Description:</p>
 	<p><%= course.description %></p>
+
+
+	<% if(students != null){ %>
+		<hr style="width:20%;float:left;" />
+		<br />
+		<p>Registered Students:</p>
+		<ul>
+		<% for(var i = 0; i < students.length; i++){ %>
+			<li><%= students[i].name %></li>
+		<% } %>
+		</ul>
+	<% } %>
 <% } %>
 
 <% if(message != null){ %>

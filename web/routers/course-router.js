@@ -23,7 +23,15 @@ router.post("/create-course", middleware.isLoggedIn, (req, res)=>{
 	}else{
 		if(req.body.title == null || req.body.title.length < 3){
 			req.flash("courseMessage", "Invalid course title");
-			return res.redirect("course/all");
+			return res.redirect("/course/all");
+		}
+
+		// Prevent non-teachers, and non-admins from creating courses.
+		if(req.session.user.role != "teacher" 
+			&& req.session.user.role != "admin")
+		{
+			req.flash("courseMessage", "Only techers can create courses");
+			return res.redirect("/course/all");
 		}
 
 		CourseController
@@ -48,6 +56,12 @@ router.get("/:courseId/join-course/", middleware.isLoggedIn, (req, res)=>{
 
 		return res.redirect("/course/all");
 	}else{
+
+		if(req.session.user.role != "student"){
+			req.flash("courseMessage", "Only students can access courses");
+			return res.redirect("/course/all");
+		}
+
 		CourseController.joinCourse(
 			req.params.courseId, req.session.user.userId)
 			.then((courseStudent)=>{
@@ -106,17 +120,33 @@ router.get("/all", (req, res)=>{
 router.get("/:courseId", (req, res)=>{
 	CourseController.getCourse(req.params.courseId)
 		.then((course)=>{
-			// console.log(course[0]);
 			// Returned course is an array.
-			res.render("course/course", {
-				course: course[0],
-				message: null
-			})
+			// console.log(course[0]);
+		
+			// Fetching the students registered to this course.
+			CourseController.getCourseStudents(course[0].course_id)
+				.then((students)=>{
+					// console.log(students);
+					
+					res.render("course/course", {
+						course: course[0],
+						students: students,
+						message: null
+				});
+					
+				}).catch((err)=>{
+					res.render("course/course", {
+						course: null,
+						students: null,
+						message: err
+					});
+				});
 		}).catch((err)=>{
 			res.render("course/course", {
 				course: null,
+				students: null,
 				message: err
-			})
+			});
 		});
 });
 
