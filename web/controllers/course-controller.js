@@ -91,6 +91,34 @@ CourseController.joinCourse = function(courseId, userId) {
 
 };
 
+CourseController.leaveCourse = function(courseId, studentId) {
+	// Using the Model.destroy(), will cost 2 queries.
+	
+	return new Promise((resolve , reject)=>{
+		var query = "delete from course_students"; 
+		query += " where course_id = ? and student_id = ?";
+
+		sequelize.query(query, {replacements: [courseId, studentId]})
+			.spread((result)=>{	
+				console.log(result);
+				// ResultSetHeader {
+				// fieldCount: 0,
+				// affectedRows: 1,
+				// insertId: 0,
+				// info: '',
+				// serverStatus: 2,
+				// warningStatus: 0 }
+				if(result != null){
+
+					resolve(result);
+				}else{
+					reject(new Error("Failed to leave course."));
+				}
+			});
+		
+	});
+};
+
 CourseController.allCourses = function() {
 	return new Promise((resolve, reject)=>{
 

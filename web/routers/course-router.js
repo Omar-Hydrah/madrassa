@@ -90,6 +90,27 @@ router.get("/:courseId/join-course/", middleware.isLoggedIn, (req, res)=>{
 	}
 });
 
+router.get("/:courseId/leave-course", middleware.isLoggedIn, (req, res)=>{
+	if(!req.session.user || !req.session.user.userId){
+		req.flash("courseMessage", "Unable to leave course - no student.");
+		res.redirect("/course/all");
+	}
+
+	CourseController.leaveCourse(req.params.courseId, req.session.user.userId)
+		.then((result)=>{
+			if(result.affectedRows == 1){
+				req.flash("courseMessage", "Student left course");
+			}else{
+				req.flash("courseMessage", 
+					"Student is not registered in this course.");
+			}
+			res.redirect("/course/all");
+		}).catch((err)=>{
+			req.flash("courseMessage", "Failed to leave course");
+		});
+	
+});
+
 router.get("/all", (req, res)=>{
 
 	// If there's a redirection from `course/create-course`, 
@@ -137,12 +158,13 @@ router.get("/:courseId", (req, res)=>{
 							}
 						}					
 					}
-
+					
 					res.render("course/course", {
 						course: course[0],
 						students: students,
-						// if a user joined, don't display the link.
+						// if a user joined, don't display the join-course link.
 						displayJoinLink: !userJoinedCourse,
+						displayLeaveLink: true,
 						message: null
 				});
 					
@@ -152,6 +174,7 @@ router.get("/:courseId", (req, res)=>{
 						course: null,
 						students: null,
 						displayJoinLink: false,
+						displayLeaveLinik: false,
 						message: err
 					});
 				});
@@ -161,6 +184,7 @@ router.get("/:courseId", (req, res)=>{
 				course: null,
 				students: null,
 				displayJoinLink: false,
+				displayLeaveLink: false,
 				message: err
 			});
 		});
