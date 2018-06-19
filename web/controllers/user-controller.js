@@ -6,7 +6,17 @@ UserController.createUser = function() {
 
 }
 
+UserController.findByUsername = async function(username) {
 
+	var user = await User.find({
+		where: {
+			username : username
+		}
+	});
+	// A promise that resolves immediately.
+	return user;
+
+};
 // Updates a user role.
 UserController.updateRole = function(userId, role) {
 	console.log(userId);
