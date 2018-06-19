@@ -1,6 +1,6 @@
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize(
-	"madrassa", 
+	process.env.db_name, 
 	process.env.db_username, 
 	process.env.db_password, 
 	{
