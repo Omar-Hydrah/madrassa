@@ -7,7 +7,9 @@ var CourseStudent = sequelize.import("../models/course-student.js");
 var CourseController = {};
 
 // The user must have a role of a teacher
-CourseController.createCourse = function(userId, title, description) {
+CourseController.createCourse = function(userId, title, description, 
+	plainCourse = true) 
+{
 
 	return new Promise((resolve, reject)=>{
 
@@ -25,7 +27,11 @@ CourseController.createCourse = function(userId, title, description) {
 					}).then((course)=>{
 
 						// Only one success case.
-						resolve(course.get({plain: true}));
+						if(plainCourse){
+							resolve(course.get({plain: true}));
+						}else{
+							resolve(course);
+						}
 
 					}).catch((err)=>{
 						console.log(err);
