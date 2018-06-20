@@ -114,7 +114,7 @@ CourseController.leaveCourse = function(courseId, studentId) {
 				// info: '',
 				// serverStatus: 2,
 				// warningStatus: 0 }
-				if(result != null){
+				if(result != null && result.affectedRows == 1){
 
 					resolve(result);
 				}else{
