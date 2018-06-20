@@ -2,6 +2,7 @@ var assert           = require("assert");
 var sequelize        = require("../config/sequelize-config.js").sequelize;
 var User             = sequelize.import("../models/user.js");
 var CourseController = require("../controllers/course-controller.js");
+var UserController   = require("../controllers/user-controller.js");
 
 describe("Controlling the course", function(){
 
@@ -24,105 +25,125 @@ describe("Controlling the course", function(){
 		role   : "student" 
 	};
 
+	var physicsObject = {
+		title : "Physics",
+		description : "Introduction to Physics"
+	};
+
 	// Insert a new teacher, a new course and a new student into the database.
 	before(function(done){
 		// Creating a teacher.
-		Promise.all([
+		/*Promise.all([
 			User.create( teacherObject, {
 				fields: ["username", "password", 
 					"first_name", "last_name", "role"
 				]
 			}),
 
-			// }).then((user)=>{
-				// teacher = user;
-				// Creating a new course, by this teacher.
-				// CourseController.createCourse(teacher.get("user_id"),
-				// 	"Chemistry", "Introduction to the world of chemistry")
-				// 	.then((course)=>{
-				// 		chemistry = course;
-				// 	}).catch((err)=>{
-				// 		throw err;
-				// 	});
-			// .catch((err)=>{
-			// 	throw err;
-			// })
-
 			// Creating a student
 			User.create(studentObject, {
 				fields: ["username", "password", 
 					"first_name", "last_name", "role"]
 			})
-			// }).then((user)=>{
-			// 	student = user;
-			// 	// console.log(Object.keys(student));
-			// }).catch((err)=>{
-			// 	throw err;
-			// })
+
 		]).then((values)=>{
-			// Teacher is first, student is second.
 			// console.log(values);
+			// Teacher is first, student is second.
 			teacher = values[0];
 			student = values[1];
-			console.log(teacher.get("username"));
 			done();
-			// CourseController.createCourse(teacher.get("user_id"),
-			// 	"Chemistry", "Introduction to the world of chemistry", false)
-			// .then((course)=>{
-			// 	chemistry = course;
-			// 	done();
-			// }).catch((err)=>{
-			// 	console.log(err);
-			// });
 
 		}).catch((err)=>{
 			console.log(err);
-		});
+		});*/
 		
-		
+		done();
 	});
-	describe("Creating a new course", ()=>{
-		var title = "Physics";
-		var description = "Introduction to Physics";
-		console.log("teacher", teacher);
-		console.log("student", student);
+	describe("Course creation", ()=>{
 
-		// CourseController.createCourse(teacher.get("user_id"),
-		// 		"Chemistry", "Introduction to the world of chemistry", false)
-		// .then((course)=>{
-		// 	chemistry = course;
-		// 	done();
-		// }).catch((err)=>{
-		// 	console.log(err);
-		// });
+		it("a teacher creates a new course", (done)=>{
+			User.findOne({where: {username: teacherObject.username}})
+			.then((user)=>{
+				CourseController.createCourse(user.get("user_id"), 
+					physicsObject.title, physicsObject.description, false)
+				.then((course)=>{
 
-		// CourseController.createCourse(teacher.get("user_id"), title, description)
-		// .then((course)=>{
-		// 	course.destroy();
-		// 	it("Contains a user id of " + teacherId, ()=>{
-		// 		assert.equal(course.get("teacher_id"), teacherId);
-		// 	});
+					assert.equal(
+						user.get("user_id"), 
+						course.get("teacher_id"),
+						"The user id must be " + 
+							user.get("user_id") + " but found " +
+							course.get("user_id"));
 
-		// }).catch((err)=>{
-		// 	console.log(err);
-		// });
-		it("Success", ()=>{
+					done();
+				}).catch((err)=>{
+					// throw err;
+					done();
+				});
+			}).catch((err)=>{
+				throw err;
+			});
 			
+		});
+
+		it("A student can not create a new course", (done)=>{
+			User.findOne({
+				where: {
+					username: teacherObject.username
+				}
+
+			}).then((user)=>{
+				// console.log(user.get("user_id"));
+
+				// assert.throws(CourseController.createCourse.bind(
+				// 	CourseController,
+				// 	user.get("user_id"), physicsObject.title,
+				// 	physicsObject.description, false), 
+				// Error, "Student error must be thrown");
+
+				CourseController.createCourse(user.get("user_id"), 
+					physicsObject.title, physicsObject.description, false)
+				.then((course)=>{
+					// console.log(course.get("title"));
+					// assert.deepEequal(course.get("title"), null, 
+					// "Course must be null");
+					// assert.throws(CourseController.createCourse, 
+					// 	Error, 
+					// 	"A student can not create a course");
+					if(course){
+						// console.log(course.get("title"));
+						// throw new Error("Test failure - a student created a course");
+						assert.fail("Test failure - a student created a course");
+					}
+					done();
+				}).catch((err)=>{
+					// throw err;
+					console.log("Error name ", err.name);
+					console.log(Object.keys(err));
+					// assert.throws(CourseController.createCourse, Error, "Student error");
+					assert.ok(err, "Error must be raised");
+				}).finally(done);
+			}).catch((err)=>{
+				throw err;
+			});
 		});
 		// Undefined:
 		// console.log(Object.keys(teacher));
 		// console.log(Object.keys(student));
+
 	});
 
 	after(function(done){
+		done();
 		// Destroying database instances.
-		Promise.all([
+		/*Promise.all([
+			sequelize.query("delete from courses"),
 			User.findOne({where: {username: teacherObject.username}}),
 			User.findOne({where: {username: studentObject.username}})	
 		]).then((values)=>{
 			Promise.all([
-				values[0].destroy(),
-				values[1].destroy()
+				values[1].destroy(),
+				values[2].destroy()
 			]).then(()=>{
 				done();
 			}).catch((err)=>{
@@ -131,7 +152,7 @@ describe("Controlling the course", function(){
 
 		}).catch((err)=>{
 			throw err;
-		});
+		});*/
 		// if(teacher != null){
 		// 	teacher.destroy();
 		// }
