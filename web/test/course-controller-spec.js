@@ -1,6 +1,7 @@
 var assert           = require("assert");
 var sequelize        = require("../config/sequelize-config.js").sequelize;
 var User             = sequelize.import("../models/user.js");
+var Course           = sequelize.import("../models/course.js");
 var CourseController = require("../controllers/course-controller.js");
 var UserController   = require("../controllers/user-controller.js");
 
@@ -33,7 +34,7 @@ describe("Controlling the course", function(){
 	// Insert a new teacher, a new course and a new student into the database.
 	before(function(done){
 		// Creating a teacher.
-		/*Promise.all([
+		Promise.all([
 			User.create( teacherObject, {
 				fields: ["username", "password", 
 					"first_name", "last_name", "role"
@@ -54,14 +55,13 @@ describe("Controlling the course", function(){
 			done();
 
 		}).catch((err)=>{
-			console.log(err);
-		});*/
-		
-		done();
+			// console.log(err);
+			console.log("Failed to create users");
+		});		
 	});
 	describe("Course creation", ()=>{
 
-		it("a teacher creates a new course", (done)=>{
+		it("A teacher creates a new course", (done)=>{
 			User.findOne({where: {username: teacherObject.username}})
 			.then((user)=>{
 				CourseController.createCourse(user.get("user_id"), 
@@ -89,79 +89,110 @@ describe("Controlling the course", function(){
 		it("A student can not create a new course", (done)=>{
 			User.findOne({
 				where: {
-					username: teacherObject.username
+					username: studentObject.username
 				}
 
 			}).then((user)=>{
-				// console.log(user.get("user_id"));
+				// Throws "UnhandledPromiseRejectionWarning",
+				// and it works as a warning if a student creates a course.
+				// Must be updated for a better version.
+				assert.rejects(
 
-				// assert.throws(CourseController.createCourse.bind(
-				// 	CourseController,
-				// 	user.get("user_id"), physicsObject.title,
-				// 	physicsObject.description, false), 
-				// Error, "Student error must be thrown");
-
-				CourseController.createCourse(user.get("user_id"), 
-					physicsObject.title, physicsObject.description, false)
-				.then((course)=>{
-					// console.log(course.get("title"));
-					// assert.deepEequal(course.get("title"), null, 
-					// "Course must be null");
-					// assert.throws(CourseController.createCourse, 
-					// 	Error, 
-					// 	"A student can not create a course");
-					if(course){
-						// console.log(course.get("title"));
-						// throw new Error("Test failure - a student created a course");
-						assert.fail("Test failure - a student created a course");
-					}
+					CourseController.createCourse(user.get("user_id"), 
+						physicsObject.title, physicsObject.description, false)
+					,
+					Error, "Failure - a student created a course")
+				.then(()=>{
+					// console.log(response);
 					done();
-				}).catch((err)=>{
-					// throw err;
-					console.log("Error name ", err.name);
-					console.log(Object.keys(err));
-					// assert.throws(CourseController.createCourse, Error, "Student error");
-					assert.ok(err, "Error must be raised");
-				}).finally(done);
+				});
 			}).catch((err)=>{
 				throw err;
 			});
 		});
-		// Undefined:
-		// console.log(Object.keys(teacher));
-		// console.log(Object.keys(student));
 
+		it("A student can join a course", (done)=>{
+			Promise.all([
+				User.findOne({
+					where: {
+						username: studentObject.username
+					}
+				}),
+				Course.findOne({
+					where: {
+						title: physicsObject.title
+					}
+				}),
+			]).then((values)=>{
+				// values[0] -> user
+				// values[1] -> course
+				CourseController.joinCourse(values[1].get("course_id"),
+					values[0].get("user_id"))
+				.then((courseStudent)=>{
+					assert.equal(courseStudent.dataValues.student_id,
+						values[0].get("user_id"), 
+						"ID mismatch - The correct student must join the course.");
+
+					assert.equal(courseStudent.dataValues.course_id,
+						values[1].get("course_id"), 
+						"ID mismatch - The correct course must be joined");
+					done();
+				}).catch((err)=>{
+					console.log(err);
+				});
+
+			}).catch((err)=>{
+				throw err;
+			});
+		});
+
+		it("A student can leave a course", (done)=>{
+			Promise.all([
+				User.findOne({
+					where: {
+						username : studentObject.username
+					}
+				}),
+				Course.findOne({
+					where: {
+						title : physicsObject.title
+					}
+				})
+			]).then((values)=>{
+				// values[0] -> user(student)
+				// values[1] -> course
+				CourseController.leaveCourse(values[1].get("course_id"),
+					values[0].get("user_id"))
+				.then((response)=>{
+					assert.notEqual(response, null, 
+						"The student didn't leave the course");
+					done();
+				}).catch((err)=>{
+					// throw err;
+					console.log(err);
+				});
+
+			}).catch((err)=>{
+				// throw err;
+				console.log(err);
+			});
+		});
 	});
+
+
 
 	after(function(done){
 		done();
 		// Destroying database instances.
-		/*Promise.all([
+		Promise.all([
 			sequelize.query("delete from courses"),
-			User.findOne({where: {username: teacherObject.username}}),
-			User.findOne({where: {username: studentObject.username}})	
-		]).then((values)=>{
-			Promise.all([
-				values[1].destroy(),
-				values[2].destroy()
-			]).then(()=>{
-				done();
-			}).catch((err)=>{
-				throw err;
-			});
-
+			sequelize.query("delete from users")
+		]).then(()=>{
+			
+			done();
 		}).catch((err)=>{
 			throw err;
-		});*/
-		// if(teacher != null){
-		// 	teacher.destroy();
-		// }
-		// if(student != null){
-		// 	student.destroy();
-		// }
-		// if(chemistry != null){
-		// 	console.log(chemistry);
-		// 	chemistry.destroy();
-		// }
+		});
+		
 	});
 });
