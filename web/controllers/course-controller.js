@@ -15,7 +15,7 @@ CourseController.createCourse = function(userId, title, description,
 
 		User.findById(userId).then((user)=>{
 
-			if(!user){
+			if(user == null){
 				reject(new Error("Teacher not found"));
 			}else{
 				// If the user is a teacher indeed, create the course.
@@ -34,7 +34,7 @@ CourseController.createCourse = function(userId, title, description,
 						}
 
 					}).catch((err)=>{
-						console.log(err);
+						// console.log(err);
 						reject(err);
 					});
 				}else{
@@ -44,7 +44,7 @@ CourseController.createCourse = function(userId, title, description,
 			}
 			
 		}).catch((err)=>{
-			console.log(err);
+			// console.log(err);
 			reject(err);
 		});
 		
@@ -61,14 +61,14 @@ CourseController.joinCourse = function(courseId, userId) {
 		query += " union all select course_id from courses where course_id = ?";
 		sequelize.query(query, {replacements: [userId, courseId]})
 			.spread((result)=>{
-				console.log(result);
+				// console.log(result);
 				if(result.length != 2){
 					// Either course or user was not found.
 
 					var error = "The user is not a student,"; 
 					error += " or course cannot be found";
 					reject(new Error(error));
-					console.log(error);
+					// console.log(error);
 
 				// }else if(result[0].user_id == userId 
 				// 	&& result[1].course_id == courseId)
@@ -83,10 +83,10 @@ CourseController.joinCourse = function(courseId, userId) {
 					}, {
 						raw: true
 					}).then((courseStudent)=>{
-						console.log(courseStudent.get({plain:true}));
+						// console.log(courseStudent.get({plain:true}));
 						resolve(courseStudent);
 					}).catch((err)=>{
-						console.log(err.name);
+						// console.log(err.name);
 						reject(err);
 					});
 					// console.log("Registering a new user.");
@@ -106,7 +106,7 @@ CourseController.leaveCourse = function(courseId, studentId) {
 
 		sequelize.query(query, {replacements: [courseId, studentId]})
 			.spread((result)=>{	
-				console.log(result);
+				// console.log(result);
 				// ResultSetHeader {
 				// fieldCount: 0,
 				// affectedRows: 1,
