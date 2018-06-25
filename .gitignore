@@ -1,7 +1,8 @@
+android/bin
+android/build
+android/.gradle
+android/commit.txt
 web/node_modules
-app/bin
-app/build
-app/.gradle
-app/commit.txt
 web/commit.txt
+web/test/temp-spec.js
 commit.txt
