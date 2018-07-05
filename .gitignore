@@ -5,4 +5,5 @@ android/commit.txt
 web/node_modules
 web/commit.txt
 web/test/temp-spec.js
+web/session.js
 commit.txt

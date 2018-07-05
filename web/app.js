@@ -53,12 +53,14 @@ var authRouter    = require("./routers/auth-router.js");
 var homeRouter    = require("./routers/home-router.js");
 var profileRouter = require("./routers/profile-router.js");
 var courseRouter  = require("./routers/course-router.js");
+var apiAuthRouter = require("./routers/api/api-auth.js");
 
 app.use("/auth", authRouter);
 // Protected routes:
 app.use("/home",    middleware.isLoggedIn, homeRouter);
 app.use("/profile", middleware.isLoggedIn, profileRouter);
 app.use("/course", courseRouter);
+app.use("/api", apiAuthRouter);
 
 app.get("/", (req, res)=>{
 	res.render("index");
