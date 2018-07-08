@@ -68,8 +68,28 @@ var registerStrategy = new LocalStrategy({
 	passReqToCallback: true
 }, function(req, username, password, done) {
 
+	User.createUser(req.body, username, password)
+	.then((result)=>{
+		// console.log("User creation: ", result);
+		if(result.errors.length != 0){
+			return done(null, false, req.flash("registerMessage", result.errors));
+		}
+
+		if(result.user == null){
+			return done(
+				null, 
+				false, 
+				req.flash(result.flash.title, result.flash.content)
+			);
+		}else{
+			return done(null, result.user);
+		}
+	}).catch((err)=>{
+		console.log(err);
+		return done(null, false, req.flash("registerMessage", "Unknown error"));
+	});
 	// Registeration/Validation errors. To be flashed using req.flash().
-	var errors = [];
+	/*var errors = [];
 
 
 	if(username.length < 2){
@@ -82,16 +102,11 @@ var registerStrategy = new LocalStrategy({
 
 	var allowedRoles = ["teacher", "student"];
 	if(allowedRoles.indexOf(req.body.role) == -1){
-		/*return req.flash("registerMessage", 
-			"");*/
 		errors.push("You must be a teacher or a student to join");
-		// console.log(req.body.role);
 	}
 
 	// If validations fail, return before trying to save to database. 
 	if(errors.length != 0){
-		// console.log(errors);
-		// console.log(errors.length);
 		return done(null, false, req.flash("registerMessage", errors));
 	}
 
@@ -111,10 +126,7 @@ var registerStrategy = new LocalStrategy({
 			return done(
 				null,  false, 
 				req.flash("registerMessage", "Unknown user creation error"));
-
 		}else{
-			// console.log("Saved user");
-			// console.log(user.get({plain: true}));
 			return done(null, user);
 			// To send plain user data:
 			// return done(null, user.get({plain: true}));
@@ -129,21 +141,18 @@ var registerStrategy = new LocalStrategy({
 	    // name: SequelizeUniqueConstraintError
 	    // Duplicate entry for username (Unique constraint fails).
 	    if(err.name == "SequelizeUniqueConstraintError"){
-			/*return done(
-				null, false, 
-				req.flash("registerMessage", 
-				"Username already registered in the database"));*/
-			// console.log(err.name);
-			errors.push("Username already registered in the database");
 
+			errors.push("Username already registered in the database");
+----------------------------------------------------
 			return done(null, false, req.flash("registerMessage", errors));
 
 	    }
 		
 		// throw err;
+----------------------------------------------------
 		return done(null, false, 
 			req.flash("registerMessage", "Unknown Registeration Error"));
-	});
+	});*/
 });
 
 passport.use("register", registerStrategy);
