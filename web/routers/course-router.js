@@ -146,14 +146,18 @@ router.get("/:courseId", (req, res)=>{
 			
 			// Fetching the students registered to this course.
 			CourseController.getCourseStudents(course[0].course_id)
-				.then((students)=>{
-					// console.log(students);
+				.then((result)=>{
+					var students = result.students;
+					// result.message, result.students
+					console.log("students", students);
 					
 					// To prevent a user from joining a course twice.
 					var userJoinedCourse = false;
-					if(req.session.user != null){
+					if(req.session.user != null && students != null){
 						for(var i = 0; i < students.length; i++){
-							if(students[i].student_id == req.session.user.userId){
+							if(students[i].student_id == 
+								req.session.user.userId)
+							{
 								userJoinedCourse = true;
 							}
 						}					
@@ -165,11 +169,13 @@ router.get("/:courseId", (req, res)=>{
 						// if a user joined, don't display the join-course link.
 						displayJoinLink: !userJoinedCourse,
 						displayLeaveLink: true,
-						message: null
+						message: (students == null || students.length == 0 ) 
+							? "No students registered yet" : null
 				});
 					
 				// Failed to get students.
 				}).catch((err)=>{
+					console.log(err);
 					res.render("course/course", {
 						course: null,
 						students: null,
@@ -180,6 +186,7 @@ router.get("/:courseId", (req, res)=>{
 				});
 		// Failed to get course data.						
 		}).catch((err)=>{
+			console.log(err);
 			res.render("course/course", {
 				course: null,
 				students: null,
