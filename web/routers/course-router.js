@@ -142,7 +142,6 @@ router.get("/:courseId", (req, res)=>{
 	CourseController.getCourse(req.params.courseId)
 		.then((course)=>{
 			// Returned course is an array.
-			// console.log(course[0]);
 			
 			// Fetching the students registered to this course.
 			CourseController.getCourseStudents(course[0].course_id)

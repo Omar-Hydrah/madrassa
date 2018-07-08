@@ -106,7 +106,6 @@ CourseController.leaveCourse = function(courseId, studentId) {
 
 		sequelize.query(query, {replacements: [courseId, studentId]})
 			.spread((result)=>{	
-				// console.log(result);
 				// ResultSetHeader {
 				// fieldCount: 0,
 				// affectedRows: 1,
@@ -174,19 +173,6 @@ CourseController.getCourse = function(courseId) {
 				}
 				resolve(result);
 			});
-
-		/*Course.findById(courseId, {raw: true})
-			.then((course)=>{
-				if(!course){
-					reject(new Error("Course not found"));
-				}else{
-					resolve(course);
-				}
-
-			}).catch((err)=>{
-				// throw err;
-				reject(course);
-			});*/
 	});
 };
 
@@ -201,7 +187,6 @@ CourseController.getCourse = function(courseId) {
 CourseController.getCourseStudents = function(courseId) {
 	return new Promise((resolve, reject)=>{
 		var query = "select cs.student_id, cs.course_id, ";
-		// query += " concat(u.first_name, ' ', u.last_name) as name, c.title";
 		query += " concat(u.first_name, ' ', u.last_name) as name";
 		query += " from course_students cs";
 		query += " left join courses c on c.course_id = cs.course_id";
@@ -220,10 +205,7 @@ CourseController.getCourseStudents = function(courseId) {
 					message: "",
 					students: []
 				};
-				console.log("Course Students");
-				console.log(data);
 				if(!data || data.length == 0){
-					console.log("found not students");
 					// Throws errors if there are no registered students!
 					// reject(new Error("Course not found"));
 					result.message = "No students yet";
