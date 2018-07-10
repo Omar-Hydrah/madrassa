@@ -27,6 +27,15 @@ public class MainActivity extends AppCompatActivity
         mainLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent loginIntent = 
+                    new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
         
         setSupportActionBar(toolbar);
     }
