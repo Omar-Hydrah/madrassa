@@ -8,7 +8,7 @@ var sequelize = new Sequelize(
 		dialect   : "mysql",
 		logging   : true,
 		operatorsAliases: false,
-		// logging: false
+		logging: false
 });
 
 
