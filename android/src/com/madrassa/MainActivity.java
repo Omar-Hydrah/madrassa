@@ -2,6 +2,9 @@ package com.madrassa;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,10 +15,14 @@ import android.widget.Toast;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity
 {
 	private CoordinatorLayout mainLayout;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor editor;
+    public static final String TAG = "activity";
 
     /** Called when the activity is first created. */
     @Override
@@ -27,6 +34,28 @@ public class MainActivity extends AppCompatActivity
         mainLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        // Check credentials from shared preferences
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // editor = sharedPrefs.edit(); 
+        String username = sharedPrefs.getString(User.USERNAME_KEY, null);
+        String password = sharedPrefs.getString(User.PASSWORD_KEY, null);
+
+        if(username != null && password != null){
+            Log.i(TAG, "SharedPrefs");
+            if(username.equals("omar") && password.equals("1234")){
+                Log.i(TAG, username);
+                Log.i(TAG, password);
+
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(homeIntent);
+            }
+            
+        }
+
 
         fab.setOnClickListener(new View.OnClickListener(){
             @Override

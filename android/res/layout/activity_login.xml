@@ -45,6 +45,8 @@
 		android:text="@string/button_login"
 		android:onClick="login"
 		android:layout_gravity="center"
+		android:background="@color/colorPrimary"
+		android:textColor="@android:color/white"
 		/>	
 
 </LinearLayout>

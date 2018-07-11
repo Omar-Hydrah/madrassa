@@ -13,4 +13,10 @@ public class HomeActivity extends AppCompatActivity{
 		
 		setContentView(R.layout.activity_home);
 	}
+
+	// Show courses.
+	// Allow joining courses.
+
+	// Create a new course for teachers.
+	// Prevent teachers from joining a course.
 }
