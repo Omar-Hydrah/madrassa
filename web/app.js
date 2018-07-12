@@ -60,7 +60,7 @@ app.use("/auth", authRouter);
 app.use("/home",    middleware.isLoggedIn, homeRouter);
 app.use("/profile", middleware.isLoggedIn, profileRouter);
 app.use("/course", courseRouter);
-app.use("/api", apiAuthRouter);
+app.use("/api/auth", apiAuthRouter);
 
 app.get("/", (req, res)=>{
 	res.render("index");
