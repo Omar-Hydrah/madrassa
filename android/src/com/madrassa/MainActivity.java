@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity
         String password = sharedPrefs.getString(User.PASSWORD_KEY, null);
 
         if(username != null && password != null){
-            Log.i(TAG, "SharedPrefs");
             if(username.equals("omar") && password.equals("1234")){
-                Log.i(TAG, username);
-                Log.i(TAG, password);
 
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
