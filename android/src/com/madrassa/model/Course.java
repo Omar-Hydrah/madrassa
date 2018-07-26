@@ -1,4 +1,4 @@
-package com.madrassa;
+package com.madrassa.model;
 
 public class Course{
 	private int courseId;

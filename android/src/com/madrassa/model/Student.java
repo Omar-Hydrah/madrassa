@@ -1,8 +1,8 @@
-package com.madrassa;
+package com.madrassa.model;
 
 public class Student extends User{
 
 	public Student(String username, String password){
-		super(username, password, UserRole.STUDENT);
+		super(username, password, "student");
 	}
 }
