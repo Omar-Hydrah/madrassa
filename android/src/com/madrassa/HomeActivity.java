@@ -16,6 +16,9 @@ import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.madrassa.model.Course;
+import com.madrassa.model.User;
+
 
 public class HomeActivity extends AppCompatActivity{
 
@@ -24,7 +27,7 @@ public class HomeActivity extends AppCompatActivity{
 	private List<Course> courses;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
-	public static final String TAG = "activity";
+	public static final String TAG = "madrassa";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
