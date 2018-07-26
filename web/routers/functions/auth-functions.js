@@ -21,7 +21,8 @@ authFunctions.createAuthToken = async function(headers, body){
 	var result = {
 		success: false,
 		message: "",
-		token  : null
+		token  : null,
+		user   : {}
 	};
 
 	if(headers["user-agent"] == "Madrassa-Application"){
@@ -48,6 +49,8 @@ authFunctions.createAuthToken = async function(headers, body){
 				var payload = {};
 				payload.userId    = user.get("user_id");
 				payload.username  = user.get("username");
+				payload.firstName = user.get("first_name");
+				payload.lastName  = user.get("last_name");
 				payload.role      = user.get("role");
 				payload.createdAt = user.get("created_at");
 
@@ -57,6 +60,14 @@ authFunctions.createAuthToken = async function(headers, body){
 				result.success = true;
 				result.message = "Token created";
 				result.token   = token;
+				
+				// To be returned to the madrassa android client
+				result.user = {};
+				result.user.id        = user.get("user_id");
+				result.user.username  = user.get("username");
+				result.user.firstName = user.get("first_name");
+				result.user.lastName  = user.get("last_name");
+				result.user.role      = user.get("role");
 				return result;
 			}
 		}catch(err){

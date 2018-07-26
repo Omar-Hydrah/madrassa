@@ -35,7 +35,8 @@ router.post("/login", (req, res)=>{
 	var response = {
 		token : null,
 		success: false,
-		message: ""
+		message: "",
+		user   : {}
 	};
 
 	// todo: create jsonwebtoken and send it to the user.
@@ -57,6 +58,7 @@ router.post("/login", (req, res)=>{
 		response.token   = tokenResult.token;
 		response.success = tokenResult.success;
 		response.message = tokenResult.message;
+		response.user    = tokenResult.user;
 		return res.json(response);
 		
 	}).catch((err)=>{
