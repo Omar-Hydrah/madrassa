@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.Menu;
 import android.util.Log;
 
+import com.madrassa.model.User;
+
 public class MainActivity extends AppCompatActivity
 {
 	private CoordinatorLayout mainLayout;

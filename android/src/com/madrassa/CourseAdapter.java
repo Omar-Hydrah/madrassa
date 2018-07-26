@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 import java.util.List;
 
+import com.madrassa.model.Course;
+
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder>{
 	private List<Course> courses;
 
