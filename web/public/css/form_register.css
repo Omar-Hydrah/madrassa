@@ -1,0 +1,40 @@
+.form-container{
+	width:100%;
+	max-width:380px;
+	margin:40px auto;
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:center;
+	/*align-items:center;*/
+	/*outline:1px solid red;*/
+}
+
+#form-register{
+	width:100%;
+	justify-content:center;
+    border-radius:10px;
+	border: 2px solid #512DA8;
+	padding:5%;
+}
+
+.form-container .form-group{
+
+}
+
+#register-button, #login-button{
+    background-color: #7c4dff;
+    color:#fff;
+}
+
+#register-button{
+    /*align-self:flex-start;*/
+    width:80%;
+    flex:1;
+    margin:0 10%;
+}
+
+#login-button{
+	width:75%;
+	margin:20px;
+	/*align-self:flex-start;*/
+}

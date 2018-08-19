@@ -1,22 +1,31 @@
 <% include ../partials/header.ejs %>
-<form action="/auth/login" method="post" >
-	<label>Username: </label>
-	<input type="text" name="username" placeholder="username" />
-	<br />
-	<label>Password: </label>
-	<input type="password" name="password" placeholder="password" />
-	<br />
+<link rel="stylesheet" type="text/css" href="/css/form_login.css" />
 
-	<input type="submit" name="submit" value="Login" />
-</form>
+<div id="form-container">
+	<form class="form-signin" action="/auth/login" method="post">
+		<h1 class="h4 mb-4 font-weight-normal" id="header">Please Sign in</h1>
+		<label for="inputEmail" class="sr-only">Email</label>
+		<input type="text" name="username" class="form-control" 
+			placeholder="Email Address" required />
 
-<% // $err must be a string %>
-<% if(err){ %>
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" name="password" class="form-control" 
+			placeholder="Password"  required />
 
-	<p style="color:red;"><%= err %></p>
-<% } %>
-
-<br /><br />
-<a href="/auth/register">Register</a>
+		<div class="checkbox mb-3">
+			<label>
+				<input type="checkbox" name="rememberMe" value="remeber-me">&nbsp;Remember me
+			</label>
+		</div>
+		<% // $err must be a string %>
+		<% if(err){ %>
+			<p style="color:red;"><%= err %></p>
+		<% }%>
+		
+		<button class="btn btn-lg btn-primary btn-block" id="login-button" type="submit">Signin</button>
+	</form>
+	<a class="btn btn-lg btn-primary btn-block" id="register-button" href="/auth/register">Register</a>
+	
+</div>
 
 <% include ../partials/footer.ejs %>

@@ -17,7 +17,7 @@ body {
 
 #form-container{
     width:100%;
-    max-width:350px;
+    max-width:380px;
     padding:20px 0;
     margin: 0 auto;
     display:flex;
@@ -28,22 +28,24 @@ body {
 }
 
 .form-signin {
-    width: 80%;
+    width: 100%;
     /*max-width: 330px;*/
-    padding: 25px;
+    padding: 10%;
     border: 2px solid #512DA8;
     border-radius:10px;
+    display:flex;
+    flex-wrap:wrap;
 }
+
 
 #login-button{
     background-color: #7c4dff;
+
 }
 
 #register-button{
-    width:65%;
+    width:80%;
     /*max-width:80%;*/
-    align-items:center;
-    justify-content:center;
     /*flex:1;*/
     margin:10px;
     color:white;
@@ -51,11 +53,12 @@ body {
 }
 
 /* 'Remember me' checkbox */
-.form-signin .checkbox {
+.checkbox {
     font-weight: 400;
     padding:5px;
+    /*outline:1px solid red;*/
+    width:100%;
 }
-
 
 .form-signin .form-control {
     position: relative;
