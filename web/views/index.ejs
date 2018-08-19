@@ -1,9 +1,27 @@
 <% include ./partials/header.ejs %>
+<link rel="stylesheet" type="text/css" href="css/signin.css">
+<form class="form-signin">
+	<h1 class="h3 mb-3 font-weight-normal">Please Sign in</h1>
+	<label for="inputEmail" class="sr-only">Email</label>
+	<input type="email" name="inputEmail" class="form-control" 
+		placeholder="Email Address" required/>
+	<label for="inputPassword" class="sr-only">Password</label>
+	<input type="password" name="inputPassword" class="form-control" 
+		placeholder="Password"  required />
+	<div class="checkbox mb-3">
+		<label>
+			<input type="checkbox" name="rememberMe" value="remeber-me">Remember me
+		</label>
+	</div>
+	<button class="btn btn-lg btn-primary btn-block" type="submit">Signin</button>
+	<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+</form>
 
 <p>Welcome to our website.</p>
 <br />
 <a href="/auth/login">Login</a>
 <br />
 <a href="/auth/register">Register</a>
+
 
 <% include ./partials/footer.ejs %>		
