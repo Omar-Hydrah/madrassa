@@ -87,6 +87,16 @@ authFunctions.createAuthToken = async function(headers, body){
 	}
 }
 
+authFunctions.isValidToken = function(){
+
+};
+
+// Verifies that request headers contain "user-agent", and "x-auth-token"
+authFunctions.areValidHeaders = function() {
+
+};
+
+
 // @Param: req.headers
 // The token is expected to be in headers["x-auth-token"]
 authFunctions.decodeToken = async function(headers){
@@ -128,7 +138,7 @@ authFunctions.decodeToken = async function(headers){
 		result.message         = "Failed to decode token";
 		return result;
 	}
-}
+};
 
 
 
