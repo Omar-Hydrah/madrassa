@@ -1,6 +1,15 @@
 "user strict";
 var bcrypt = require("bcrypt-nodejs");
 
+// Return an error element, to be added to the errors array.
+// Titles should be "username", "email", "password" and "role"
+function createError(title, content){
+	return {
+		title: title, 
+		content: content
+	};
+}
+
 module.exports = function(sequelize, DataTypes) {
 	var User = sequelize.define("user", {
 		user_id :{
@@ -62,17 +71,29 @@ module.exports = function(sequelize, DataTypes) {
 				}
 			};
 
+			// Update errors, so that they can be checked 
+			// 		in the view by their titles
 			if(username.length < 2){
-				result.errors.push("Username must be more than 2 characters.");
+				result.errors.push(createError(
+					"username",
+					"Username must be more than 2 characters."
+				));
 			}
 
 			if(password.length < 4){
-				result.errors.push("Password must be at least 4 characters.");
+				result.errors.push(createError(
+					"password", 
+					"Password must be at least 4 characters."
+				));
 			}
 
 			var allowedRoles = ["teacher", "student"];
 			if(allowedRoles.indexOf(body.role) == -1){
-				result.errors.push("You must be a teacher or a student to join");
+				console.log("role: " + body.role);
+				result.errors.push(createError(
+					"role", 
+					"You must be a teacher or a student to join"
+				));
 			}
 
 			// If validations fail, return before trying to save to database. 
@@ -114,7 +135,10 @@ module.exports = function(sequelize, DataTypes) {
 			    // name: SequelizeUniqueConstraintError
 			    // Duplicate entry for username (Unique constraint fails).
 			    if(err.name == "SequelizeUniqueConstraintError"){
-					result.errors.push("Username already registered in the database");
+					result.errors.push(createError(
+						"username",
+						"Username already registered in the database"
+					));
 
 					// return done(null, false, req.flash("registerMessage", errors));
 					result.flash.title = "registerMessage";

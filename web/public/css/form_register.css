@@ -21,6 +21,10 @@
 
 }
 
+.invalid-feedback{
+	color:red;
+}
+
 #register-button, #login-button{
     background-color: #7c4dff;
     color:#fff;
