@@ -146,9 +146,9 @@ router.get("/:courseId", (req, res)=>{
 			// Fetching the students registered to this course.
 			CourseController.getCourseStudents(course[0].course_id)
 				.then((result)=>{
-					var students = result.students;
+					var students = result;
 					// result.message, result.students
-					console.log("students", students);
+					// console.log("students", students);
 					
 					// To prevent a user from joining a course twice.
 					var userJoinedCourse = false;
