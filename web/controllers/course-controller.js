@@ -201,18 +201,13 @@ CourseController.getCourseStudents = function(courseId) {
 	    // title: 'Philosophy' }
 		sequelize.query(query, {replacements: [courseId]})
 			.spread((data)=>{
-				var result = {
-					message: "",
-					students: []
-				};
 				if(!data || data.length == 0){
 					// Throws errors if there are no registered students!
 					// reject(new Error("Course not found"));
-					result.message = "No students yet";
-					resolve(result);
+					resolve(null);
+
 				}else{
-					result.students = data;
-					resolve(result);
+					resolve(data);
 				}
 			});
 		
