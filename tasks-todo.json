@@ -1,0 +1,17 @@
+{
+	"web":{
+		"routers": [
+		],
+		"functions": [
+			{
+				"location": "web/routers/functions/auth-functions.js",
+				"problem": "when decoding an invalid json token, the error is displayed",
+				"solution": "fail silently, or log to record possible hack attempts"	
+			},
+		]
+	}
+	,
+	"android": [
+
+	]
+}
