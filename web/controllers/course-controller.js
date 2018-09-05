@@ -169,7 +169,8 @@ CourseController.getCourse = function(courseId) {
 		sequelize.query(query, {replacements: [courseId]})
 			.spread((result)=>{
 				if(!result || result.length == 0){
-					reject(new Error("Course not found"));
+					// reject(new Error("Course not found"));
+					resolve(null);
 				}
 				resolve(result);
 			});
