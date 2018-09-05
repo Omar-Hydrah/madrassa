@@ -34,30 +34,32 @@ middleware.isNotLoggedIn = function(req, res, next) {
 // User-Agent is "Madrassa-Application"
 middleware.isAuthenticated = function(req, res, next) {
 
-	var decodedPromise = authFunctions.verifyToken(req.headers);
-	var result = {};
+	var decodedPromise = authFunctions.decodeToken(req.headers);
+	console.log(req.headers);
+
+	// A response will only be sent when failing to authenticate.
+	var response = {
+		success: false,
+		message: ""
+	};
 
 	// Promise should resolve immediately
 	decodedPromise.then((data)=>{
-		result = data;
-		// console.log(result);
+		// data {isAuthenticated: boolean, message: "string", decoded: {}}
+		console.log(data);
+		if(data.isAuthenticated){
+			req.flash("decoded", data.decoded);
+			next();
+		}else{
+			response.message = "Failed to authenticate token";
+			return res.status(401).json(response);
+		}
+
 	}).catch((err)=>{
-		return res.status(401).json({
-			success: false,
-			message: "Failed to decode token"
-		});
+		response.message = "Failed to decode token";
+		return res.status(401).json(response);
 	});
 
-	if(result.isAuthenticated && result.decoded != null){
-		console.log("Processing result");
-		req.flash("decoded", result.decoded);
-		next();
-	}else{
-		return res.json({
-			success: false,
-			message: "Faile to process token"
-		});
-	}
 };
 
 // If a user is trying to access a protected resource, he should be 
