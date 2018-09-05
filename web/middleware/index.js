@@ -35,7 +35,6 @@ middleware.isNotLoggedIn = function(req, res, next) {
 middleware.isAuthenticated = function(req, res, next) {
 
 	var decodedPromise = authFunctions.decodeToken(req.headers);
-	console.log(req.headers);
 
 	// A response will only be sent when failing to authenticate.
 	var response = {
@@ -46,7 +45,6 @@ middleware.isAuthenticated = function(req, res, next) {
 	// Promise should resolve immediately
 	decodedPromise.then((data)=>{
 		// data {isAuthenticated: boolean, message: "string", decoded: {}}
-		console.log(data);
 		if(data.isAuthenticated){
 			req.flash("decoded", data.decoded);
 			next();

@@ -3,8 +3,12 @@ var validator     = require("../functions/validator.js");
 var authFunctions = require("../functions/auth-functions.js");
 var middleware    = require("../../middleware/index.js");
 
+var token = {};
+
 // All courses
-router.get("/", (req, res)=>{
+router.get("/", middleware.isAuthenticated, (req, res)=>{
+	token = req.flash("decoded");
+
 	var response = {
 		message: "",
 		success: false,
@@ -15,7 +19,9 @@ router.get("/", (req, res)=>{
 });
 
 // Display a single course's data
-router.get("/:courseId", (req, res)=>{
+router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
+	token = req.flash("decoded");
+
 	var response = {
 		message: "",
 		success: false,
@@ -25,7 +31,8 @@ router.get("/:courseId", (req, res)=>{
 	res.json(response);
 });
 
-router.post("/:courseId/join-course", (req, res)=>{
+router.post("/:courseId/join-course", middleware.isAuthenticated, (req, res)=>{
+	token = req.flash("decoded");
 	var response = {
 		message: "",
 		success: false

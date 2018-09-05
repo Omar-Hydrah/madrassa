@@ -10,6 +10,7 @@ authFunctions.decodeToken ->
 var jwt       = require("jsonwebtoken");
 var sequelize = require("../../config/sequelize-config.js").sequelize;
 var User      = sequelize.import("../../models/user.js");
+var moment = require("moment");
 
 var authFunctions = {}; // to be exporetd.
 
@@ -52,7 +53,7 @@ authFunctions.createAuthToken = async function(headers, body){
 				payload.firstName = user.get("first_name");
 				payload.lastName  = user.get("last_name");
 				payload.role      = user.get("role");
-				payload.createdAt = user.get("created_at");
+				payload.createdAt = moment(user.get("created_at")).format("YYYY-MM-DD");
 
 				var token = jwt.sign(payload, secret, {
 					expiresIn: 60 * 60 * 24 * 3
@@ -107,7 +108,7 @@ authFunctions.decodeToken = async function(headers){
 		decoded   : null
 	};
 
-	if(headers["User-Agent"] != "Madrassa-Application"){
+	if(headers["user-agent"] != "Madrassa-Application"){
 		result.isAuthenticated = false;
 		result.message         = "Can't verify tokens for non android clients";
 		return result;
