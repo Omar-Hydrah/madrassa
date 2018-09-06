@@ -25,7 +25,7 @@ import retrofit2.Response;
 
 import com.madrassa.response.AuthResponse;
 import com.madrassa.model.User;
-import com.madrassa.service.AuthService;
+import com.madrassa.client.AuthClient;
 
 public class LoginActivity extends AppCompatActivity{
 	
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity{
 		final String username = inputUsername.getText().toString().trim();
 		final String password = inputPassword.getText().toString().trim();
 
-		AuthService client = retrofit.create(AuthService.class);
+		AuthClient client = retrofit.create(AuthClient.class);
 		Map<String, String> credentials = new HashMap<>();
 		credentials.put("username", username);
 		credentials.put("password", password);
