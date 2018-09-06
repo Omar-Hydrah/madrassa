@@ -25,13 +25,14 @@ import retrofit2.Response;
 
 import com.madrassa.response.AuthResponse;
 import com.madrassa.model.User;
+import com.madrassa.service.MadrassaClient;
 
 public class LoginActivity extends AppCompatActivity{
 	
 	private SharedPreferences sharedPrefs;
 	private SharedPreferences.Editor editor; 
 	public static final String TAG = "madrassa";
-	private String baseUrl = "http://192.168.1.103/"; 
+	private String baseUrl = "http://192.168.1.103/api"; 
 	private final String userAgent = "Madrassa-Application";
 	private Retrofit retrofit = new Retrofit.Builder()
 		.baseUrl(baseUrl)
