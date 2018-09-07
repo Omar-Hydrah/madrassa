@@ -5,6 +5,7 @@ import com.madrassa.model.Student;
 import com.madrassa.model.Course;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.AppRepository;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -24,15 +25,19 @@ public class MadrassaRequest{
 	private MadrassaService service;
 	private OkHttpClient clien;
 	private final int BASE_URL = "http://192.168.1.103/api";
+	private String authHeader;
 	public static final String TAG = "madrassa";
+	private AppRepository repo;
 
+	public MadrassaRequest(){
+		repo       = AppRepository.getInstance(getApplicationContext());
+		authHeader = repo.getAuthHeader();
 
-	public MadrassaClient(){
-		client = buildClient();		
+		httpClient = buildClient();		
 
 		retrofit = new Retrofit.Builder()
 			.baseUrl(BASE_URL)
-			.client(client)
+			.client(httpClient)
 			.addConverterFactory(GsonConverterFactory.create()) 
 			.build();
 
@@ -41,7 +46,7 @@ public class MadrassaRequest{
 		getCourse(7);
 	}
 
-	// Creates the interceptor to add authorization headers. 
+	// Intercepts the OkHttpClient requests to add authorization headers. 
 	private OkHttpClient buildClient(){
 		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 		clientBuilder.addInterceptor(new Interceptor(){
@@ -50,7 +55,7 @@ public class MadrassaRequest{
 				Request originalRequest = chain.request();
 
 				Request.Builder requestBuilder = originalRequest.newBuilder()
-					.header("x-auth-header", "value")
+					.header("x-auth-header", authHeader)
 					.header("User-Agent", "Madrassa-Client");
 
 				Request request = requestBuilder.build();

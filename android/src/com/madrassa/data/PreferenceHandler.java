@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import com.madrassa.model.User;
+
 public class PreferenceHandler{
 
 	private SharedPreferences prefs;
@@ -33,4 +35,10 @@ public class PreferenceHandler{
 	public String getValue(String key){
 		return prefs.get(key);
 	}
+
+	// Gets the stored ["x-auth-header"] from preferences (jsonwebtoken)
+	public String getAuthHeader(){
+		return editor.get(User.TOKEN_KEY);
+	}
+
 }
