@@ -1,4 +1,4 @@
-package com.madrassa.client;
+package com.madrassa.service;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import com.madrassa.response.CourseResponse;
 import com.madrassa.response.CourseListResponse;
 
 /* Request should be intercepted, and altered with the proper token */
-public interface MadrassaClient{
+public interface MadrassaService{
 
 	@GET("/course")
 	Call<CourseListResponse> getCourses();

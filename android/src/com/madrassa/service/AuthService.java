@@ -1,4 +1,4 @@
-package com.madrassa.client;
+package com.madrassa.service;
 
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.Call;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.madrassa.response.AuthResponse;
 
-public interface AuthClient{
+public interface AuthService{
 	@FormUrlEncoded
 	@POST("/auth/login")
 	Call<AuthResponse> login(@Header("User-Agent") String userAgent,
