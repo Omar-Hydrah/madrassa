@@ -9,28 +9,29 @@ import com.madrassa.AppRepository;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import okhttp3.Request;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.List;
+import java.io.IOException;
 import android.util.Log;
 
 public class MadrassaRequest{
 
 	private Retrofit retrofit;
 	private MadrassaService service;
-	private OkHttpClient clien;
-	private final int BASE_URL = "http://192.168.1.103/api";
+	private OkHttpClient httpClient;
+	private final String BASE_URL = "http://192.168.1.103/api";
 	private String authHeader;
 	public static final String TAG = "madrassa";
 	private AppRepository repo;
 
 	public MadrassaRequest(){
-		repo       = AppRepository.getInstance(getApplicationContext());
+		repo       = AppRepository.getInstance();
 		authHeader = repo.getAuthHeader();
 
 		httpClient = buildClient();		
@@ -51,7 +52,7 @@ public class MadrassaRequest{
 		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 		clientBuilder.addInterceptor(new Interceptor(){
 			@Override
-			public Response intercept(Interceptor.Chain chain){
+			public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException{
 				Request originalRequest = chain.request();
 
 				Request.Builder requestBuilder = originalRequest.newBuilder()

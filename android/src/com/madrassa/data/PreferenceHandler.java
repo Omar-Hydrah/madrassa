@@ -4,6 +4,9 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import java.util.Map;
+
+import com.madrassa.MadrassaApplication;
 import com.madrassa.model.User;
 
 public class PreferenceHandler{
@@ -13,7 +16,7 @@ public class PreferenceHandler{
 	private Context context;
 
 	public PreferenceHandler(){
-		context = Context.getApplicationContext();
+		context = MadrassaApplication.getContext();
 		prefs   = PreferenceManager.getDefaultSharedPreferences(context);
 		editor  = prefs.edit(); 
 	}
@@ -27,18 +30,18 @@ public class PreferenceHandler{
 		editor.commit();
 	}
 
-	public void writeValue(String key, String value){
+	public void putString(String key, String value){
 		editor.putString(key, value);
 		editor.commit();
 	}
 
-	public String getValue(String key){
-		return prefs.get(key);
+	public String getString(String key){
+		return prefs.getString(key, null);
 	}
 
 	// Gets the stored ["x-auth-header"] from preferences (jsonwebtoken)
 	public String getAuthHeader(){
-		return editor.get(User.TOKEN_KEY);
+		return prefs.getString(User.TOKEN_KEY, null);
 	}
 
 }

@@ -14,6 +14,14 @@ public class AppRepository{
 	private PreferenceHandler prefHandler;
 	private Context context;
 
+	public static AppRepository getInstance(){
+		if(instance == null){
+			instance = new AppRepository();
+		}
+
+		return instance;
+	}
+
 	public static AppRepository getInstance(Context context){
 		if(instance == null){
 			instance = new AppRepository(context);
@@ -22,7 +30,11 @@ public class AppRepository{
 		return instance;
 	}
 
-	private AppRepositry(Context context){
+	private AppRepository(){
+		
+	}
+
+	private AppRepository(Context context){
 		this.context = context;
 	}
 
