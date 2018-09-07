@@ -10,16 +10,16 @@ public class CourseResponse{
 	Course course;
 	Student[] students;
 
-	public CoursesResponse(){
+	public CourseResponse(){
 
 	}
 
-	public CoursesResponse(String message, boolean success){
+	public CourseResponse(String message, boolean success){
 		this.message = message;
 		this.success = success;
 	}
 
-	public CoursesResponse(String message, boolean success, Course course, 
+	public CourseResponse(String message, boolean success, Course course, 
 		Student[] students)
 	{
 		this.message  = message;
