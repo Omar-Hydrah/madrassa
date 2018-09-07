@@ -1,6 +1,16 @@
 {
 	"web":{
+		"general": [
+			"install chai",
+			"create unit tests for web/controllers/"
+		]
+		,
 		"routers": [
+			"reduce the code in router files, by moving the logic into the controllers"
+		],
+		"controllers": [
+			"move the database logic into the models",
+			"handle routing"
 		],
 		"functions": [
 			{
@@ -11,7 +21,9 @@
 		]
 	}
 	,
-	"android": [
-
-	]
+	"android": {
+		"response": [
+			"CoursesResponse should extend CourseResponse"
+		]
+	}
 }
