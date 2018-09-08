@@ -24,16 +24,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.madrassa.response.AuthResponse;
-import com.madrassa.model.User;
 import com.madrassa.service.AuthService;
+import com.madrassa.model.User;
+import com.madrassa.AppRepository;
 
 public class LoginActivity extends AppCompatActivity{
 	
 	private SharedPreferences sharedPrefs;
 	private SharedPreferences.Editor editor; 
 	public static final String TAG = "madrassa";
-	private String baseUrl = "http://192.168.1.103/api"; 
+	private String baseUrl = "http://192.168.1.103/"; 
 	private final String userAgent = "Madrassa-Application";
+	private AppRepository repo;
 	private Retrofit retrofit = new Retrofit.Builder()
 		.baseUrl(baseUrl)
 		.addConverterFactory(GsonConverterFactory.create())
@@ -46,7 +48,7 @@ public class LoginActivity extends AppCompatActivity{
 
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		editor = sharedPrefs.edit();
-
+		repo = AppRepository.getInstance();
 	}
 
 	// Log-in the user to the home activity.
@@ -72,6 +74,13 @@ public class LoginActivity extends AppCompatActivity{
 			{
 
 				AuthResponse authResponse = response.body();
+
+				if(authResponse == null){
+					Toast.makeText(LoginActivity.this, 
+						"Received an invalid response from the server", 
+						Toast.LENGTH_SHORT).show();
+					return;
+				}
 
 				String  message = authResponse.getMessage();
 				boolean success = authResponse.isSuccess();
