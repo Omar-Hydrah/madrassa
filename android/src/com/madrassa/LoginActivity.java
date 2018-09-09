@@ -23,6 +23,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import com.madrassa.response.AuthResponse;
 import com.madrassa.service.AuthService;
 import com.madrassa.model.User;
@@ -60,12 +64,27 @@ public class LoginActivity extends AppCompatActivity{
 		final String username = inputUsername.getText().toString().trim();
 		final String password = inputPassword.getText().toString().trim();
 
-		AuthService service = retrofit.create(AuthService.class);
+		// AuthService service = retrofit.create(AuthService.class);
+		
 		Map<String, String> credentials = new HashMap<>();
 		credentials.put("username", username);
 		credentials.put("password", password);
 
-		Call<AuthResponse> call = service.login(userAgent, credentials);
+		repo.login(credentials)
+		.subscribeOn(Schedulers.computation())
+		.observeOn(AndroidSchedulers.mainThread())
+		.subscribe(authResponse -> {
+			Log.i(TAG, authResponse.toString());
+			Toast.makeText(LoginActivity.this, "Login Success" , 
+				Toast.LENGTH_SHORT).show();
+		}, throwable -> {
+			// Log.i(TAG, throwable.getMessage());
+			Toast.makeText(LoginActivity.this, "Error occurred", 
+				Toast.LENGTH_SHORT).show();
+		});
+
+
+		/*Call<AuthResponse> call = service.login(userAgent, credentials);
 
 		call.enqueue(new Callback<AuthResponse>(){
 			@Override
@@ -124,7 +143,7 @@ public class LoginActivity extends AppCompatActivity{
 			public void onFailure(Call<AuthResponse> call, Throwable t){
 				displayToastMessage("Error occurred");
 			}
-		});
+		});*/
 
 		/*if(username.equals("omar") && password.equals("1234")){
 			editor.putString(User.USERNAME_KEY, username);

@@ -37,17 +37,19 @@ public class AuthRequest{
 
 
 	public AuthRequest(){
-
+		// Creates a client that includes the "User-Agent" header
+		OkHttpClient client = buildClient();
 
 		retrofit = new Retrofit.Builder()
 			.baseUrl(BASE_URL)
+			.client(client)
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.addConverterFactory(GsonConverterFactory.create())
 			.build();
 	}
 
 	// Returns a Single, to be used in the AppRepository.
-	public Single<AuthResponse> requestLogin(Map<String, String> credentials){
+	public Single<AuthResponse> login(Map<String, String> credentials){
 		AuthService service = retrofit.create(AuthService.class);
 		/*Call<AuthResponse> call = service.login(USER_AGENT, credentials);
 		call.enqueue(new Callback<AuthResponse>(){
@@ -68,6 +70,7 @@ public class AuthRequest{
 		return service.login(credentials);
 	}
 
+	// Insert the ["User-Agent"] header
 	public OkHttpClient buildClient(){
 		OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder(); 
 		clientBuilder.addInterceptor(new Interceptor(){

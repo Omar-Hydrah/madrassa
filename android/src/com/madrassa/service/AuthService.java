@@ -7,7 +7,6 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.util.Map;
 
@@ -18,8 +17,4 @@ public interface AuthService{
 	@POST("/api/auth/login")
 	Single<AuthResponse> login(@FieldMap Map<String, String> credentials);
 
-	@FormUrlEncoded
-	@Post("/api/auth/login")
-	Call<AuthResponse> login(@Header("User-Agent") String userAgent, 
-		@FieldMap Map<String, String> credentials);
 }
