@@ -37,8 +37,20 @@ public class AuthResponse{
 	public User getUser(){return this.user;}
 	public void setUser(User user){this.user = user;}
 
+	public String getUserToString(){
+		if(this.user != null){
+			return " user : " + user.toString();
+		}else{
+			return "";
+		}
+	}
+
 	public String toString(){
-		return "{success: " + success + ", message: '" + message + "',"
-			+ " token: '" + token + "'";
+		String userToString = " user";
+
+		return "{success: " + success + ", message: '" + message + "'," + 
+			" token: '" + token + "'" +
+			getUserToString() +
+			"}";
 	}
 }
