@@ -9,21 +9,26 @@ import java.util.Map;
 import com.madrassa.MadrassaApplication;
 import com.madrassa.model.User;
 
+import android.util.Log;
+
 public class PreferenceHandler{
 
-	private SharedPreferences prefs;
+	private SharedPreferences sharedPreferences;
 	private SharedPreferences.Editor editor;
 	private Context context;
 
 	public PreferenceHandler(){
 		context = MadrassaApplication.getContext();
-		prefs   = PreferenceManager.getDefaultSharedPreferences(context);
-		editor  = prefs.edit(); 
+		sharedPreferences   = PreferenceManager.getDefaultSharedPreferences(context);
+		editor  = sharedPreferences.edit(); 
 	}
 
+
 	// Writes a java.util.Map to shared preferences
-	public void writeValues(Map<String, String> values){
+	public void putStringMap(Map<String, String> values){
+		// Log.i("madrassa", values.toString());
 		for(String key : values.keySet()){
+			// Log.i("madrassa", "prefHandler: " + key + "- " +values.get(key));
 			editor.putString(key, values.get(key));
 		}
 
@@ -36,12 +41,12 @@ public class PreferenceHandler{
 	}
 
 	public String getString(String key){
-		return prefs.getString(key, null);
+		return sharedPreferences.getString(key, null);
 	}
 
 	// Gets the stored ["x-auth-header"] from preferences (jsonwebtoken)
 	public String getAuthHeader(){
-		return prefs.getString(User.TOKEN_KEY, null);
+		return sharedPreferences.getString(User.TOKEN_KEY, null);
 	}
 
 }

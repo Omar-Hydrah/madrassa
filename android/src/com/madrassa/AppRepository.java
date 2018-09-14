@@ -2,6 +2,7 @@ package com.madrassa;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.util.Log;
 
 import com.madrassa.model.Course;
 import com.madrassa.model.Student;
@@ -31,25 +32,24 @@ public class AppRepository{
 		return instance;
 	}
 
+	// Preferred way of constructing AppRepository.
 	public static AppRepository getInstance(Context context){
 		if(instance == null){
 			instance = new AppRepository(context);
+			
 		}
 
 		return instance;
-	}
+	} 
 
 	private AppRepository(){
-		if(authRequest == null){
-			authRequest = new AuthRequest();
-		}
+
 	}
 
 	private AppRepository(Context context){
 		this.context = context;
-		if(authRequest == null){
-			authRequest  = new AuthRequest();
-		}
+		prefHandler = new PreferenceHandler();
+		authRequest = new AuthRequest();
 	}
 
 	// Returns the ["x-auth-header"] stored in shared preferences.
@@ -65,6 +65,11 @@ public class AppRepository{
 	// Retrieve a string from shared preferences
 	public String getPrefString(String key){
 		return prefHandler.getString(key);
+	}
+
+	public void saveLoginPreferences(Map<String, String> loginPreferences){
+		// Log.i("madrassa", loginPreferences.toString());
+		prefHandler.putStringMap(loginPreferences);
 	}
 
 	public Single<AuthResponse> login(Map<String, String> credentials){
