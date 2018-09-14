@@ -14,7 +14,7 @@ public class User{
 	public static final String USERNAME_KEY   = "username_key";
 	public static final String PASSWORD_KEY   = "password_key";
 	public static final String FIRST_NAME_KEY = "first_name_key";
-	public static final String LAST_NAME_KEY  = "lsat_name_key";
+	public static final String LAST_NAME_KEY  = "last_name_key";
 	public static final String ROLE_KEY       = "role_key";
 	public static final String TOKEN_KEY      = "auth_token";
 
