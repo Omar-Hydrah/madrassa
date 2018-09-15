@@ -12,6 +12,9 @@ import retrofit2.http.Header;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 
+import io.reactivex.Single;
+import io.reactivex.Observable;
+
 import com.madrassa.response.CourseResponse;
 import com.madrassa.response.CourseListResponse;
 
@@ -19,8 +22,8 @@ import com.madrassa.response.CourseListResponse;
 public interface MadrassaService{
 
 	@GET("/course")
-	Call<CourseListResponse> getCourses();
+	Single<CourseListResponse> getCourseList();
 
 	@GET("/course/{id}")
-	Call<CourseResponse> getCourse(@Path("id") int id);
+	Single<CourseResponse> getCourse(@Path("id") int id);
 }

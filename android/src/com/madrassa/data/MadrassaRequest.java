@@ -1,11 +1,12 @@
 package  com.madrassa.data;
 
+import com.madrassa.AppRepository;
+import com.madrassa.MadrassaApplication;
 import com.madrassa.service.MadrassaService;
 import com.madrassa.model.Student;
 import com.madrassa.model.Course;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.response.CourseResponse;
-import com.madrassa.AppRepository;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -15,36 +16,43 @@ import retrofit2.Retrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import java.util.List;
 import java.io.IOException;
+
 import android.util.Log;
 
 public class MadrassaRequest{
 
-	private Retrofit retrofit;
-	private MadrassaService service;
-	private OkHttpClient httpClient;
-	private final String BASE_URL = "http://192.168.1.103/api";
-	private String authHeader;
 	public static final String TAG = "madrassa";
-	private AppRepository repo;
+	private final String BASE_URL = "http://192.168.1.103/api";
+	private Retrofit        retrofit;
+	private MadrassaService service;
+	private OkHttpClient    httpClient;
+	private String          authHeader;
+	private AppRepository   repo;
 
 	public MadrassaRequest(){
-		repo       = AppRepository.getInstance();
-		authHeader = repo.getAuthHeader();
+		repo       = AppRepository.getInstance(
+			MadrassaApplication.getContext());
 
+		authHeader = repo.getAuthHeader();
 		httpClient = buildClient();		
 
 		retrofit = new Retrofit.Builder()
 			.baseUrl(BASE_URL)
 			.client(httpClient)
+			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.addConverterFactory(GsonConverterFactory.create()) 
 			.build();
 
 		service = retrofit.create(MadrassaService.class);
 
-		getCourse(7);
+		// getCourse(7);
 	}
 
 	// Intercepts the OkHttpClient requests to add authorization headers. 
@@ -68,25 +76,11 @@ public class MadrassaRequest{
 		return client;
 	}
 
-	public void getCourse(int id){
-		Call<CourseResponse> call = service.getCourse(id);
-		call.enqueue(new Callback<CourseResponse>(){
-			@Override
-			public void onResponse(Call<CourseResponse> call, 
-				Response<CourseResponse> response)
-			{
-				CourseResponse courseResponse = response.body();
-				Log.i(TAG, courseResponse.getCourse().getTitle());
-			}
-
-			@Override
-			public void onFailure(Call<CourseResponse> call, Throwable t){
-				Log.i(TAG, "Grave error occurred");
-			}
-		});
+	public Single<CourseResponse> getCourse(int id){
+		return service.getCourse(id);
 	}
 
-	public void getCourses(){
-
+	public Single<CourseListResponse> getCourseList(){
+		return service.getCourseList();
 	}
 }

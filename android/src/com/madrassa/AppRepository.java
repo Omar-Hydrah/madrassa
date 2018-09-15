@@ -8,11 +8,13 @@ import com.madrassa.model.Course;
 import com.madrassa.model.Student;
 import com.madrassa.data.PreferenceHandler;
 import com.madrassa.data.AuthRequest;
+import com.madrassa.data.MadrassaRequest;
 import com.madrassa.response.AuthResponse;
+import com.madrassa.response.CourseListResponse;
+import com.madrassa.response.CourseResponse;
 
 import io.reactivex.Single;
 import io.reactivex.Observable;
-
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ public class AppRepository{
 	private PreferenceHandler prefHandler;
 	private Context context;
 	private AuthRequest authRequest;
+	private MadrassaRequest madrassaRequest; // for authenticated requests.
 
 	public static AppRepository getInstance(){
 		if(instance == null){
@@ -48,8 +51,9 @@ public class AppRepository{
 
 	private AppRepository(Context context){
 		this.context = context;
-		prefHandler = new PreferenceHandler();
-		authRequest = new AuthRequest();
+		prefHandler     = new PreferenceHandler();
+		authRequest     = new AuthRequest();
+		madrassaRequest = new MadrassaRequest();
 	}
 
 	// Returns the ["x-auth-header"] stored in shared preferences.
@@ -76,7 +80,11 @@ public class AppRepository{
 		return authRequest.login(credentials);
 	}
 
-	/*public List<Course> getCourseList(){
-		
-	}*/
+	public Single<CourseListResponse> getCourseList(){
+		return madrassaRequest.getCourseList();
+	}
+
+	public Single<CourseResponse> getCourse(int id){
+		return madrassaRequest.getCourse(id);
+	}
 }
