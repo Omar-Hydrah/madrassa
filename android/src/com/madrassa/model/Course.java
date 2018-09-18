@@ -56,4 +56,13 @@ public class Course{
 	public void setTeacherName(String name){this.teacherName = name;}
 	public Student[] getStudents(){return this.students;}
 	public void setStudents(Student[] students){this.students = students;}
+
+	public String toString(){
+		return "{" + 
+			"courseId: "    + courseId + ", " +
+			"teacherName: " + teacherName + ", " +
+			"title: "       + title + ", " +
+			"description: " + description +
+			"}";
+	}
 }
