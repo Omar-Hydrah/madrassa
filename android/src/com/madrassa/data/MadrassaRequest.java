@@ -7,6 +7,7 @@ import com.madrassa.model.Student;
 import com.madrassa.model.Course;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.util.Constants;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -29,7 +30,8 @@ import android.util.Log;
 public class MadrassaRequest{
 
 	public static final String TAG = "madrassa";
-	private final String BASE_URL = "http://192.168.1.103/api";
+	private final String BASE_URL   = Constants.BASE_URL;
+	private final String USER_AGENT = Constants.USER_AGENT;
 	private Retrofit        retrofit;
 	private MadrassaService service;
 	private OkHttpClient    httpClient;
@@ -66,7 +68,7 @@ public class MadrassaRequest{
 
 				Request.Builder requestBuilder = originalRequest.newBuilder()
 					.header("x-auth-header", authHeader)
-					.header("User-Agent", "Madrassa-Client");
+					.header("User-Agent", USER_AGENT);
 
 				Request request = requestBuilder.build();
 				return chain.proceed(request);
