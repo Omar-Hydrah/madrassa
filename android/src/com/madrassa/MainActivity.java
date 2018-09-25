@@ -37,25 +37,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        // Check credentials from shared preferences
-        /*sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        // editor = sharedPrefs.edit(); 
-        String username = sharedPrefs.getString(User.USERNAME_KEY, null);
-        String password = sharedPrefs.getString(User.PASSWORD_KEY, null);
-
-        if(username != null && password != null){
-            if(username.equals("omar") && password.equals("1234")){
-
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                    Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(homeIntent);
-            }
-            
-        }*/
-
-
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
