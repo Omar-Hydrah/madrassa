@@ -27,33 +27,22 @@ public class AppRepository{
 	private AuthRequest authRequest;
 	private MadrassaRequest madrassaRequest; // for authenticated requests.
 
-	public static AppRepository getInstance(){
-		if(instance == null){
-			instance = new AppRepository();
-		}
-
-		return instance;
-	}
 
 	// Preferred way of constructing AppRepository.
 	public static AppRepository getInstance(Context context){
 		if(instance == null){
-			instance = new AppRepository(context);
-			
+			instance = new AppRepository(context);			
 		}
 
 		return instance;
-	} 
-
-	private AppRepository(){
-
 	}
 
 	private AppRepository(Context context){
 		this.context = context;
 		prefHandler     = new PreferenceHandler();
 		authRequest     = new AuthRequest();
-		madrassaRequest = new MadrassaRequest();
+		madrassaRequest = new MadrassaRequest(getAuthHeader());
+		Log.i("madrassa", getAuthHeader());
 	}
 
 	// Returns the ["x-auth-header"] stored in shared preferences.

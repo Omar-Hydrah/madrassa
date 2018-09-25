@@ -34,14 +34,15 @@ public class MadrassaRequest{
 	private MadrassaService service;
 	private OkHttpClient    httpClient;
 	private String          authHeader;
-	private AppRepository   repo;
+	// private AppRepository   repo;
 
-	public MadrassaRequest(){
-		repo       = AppRepository.getInstance(
-			MadrassaApplication.getContext());
+	public MadrassaRequest(String authHeader){
+		// repo       = AppRepository.getInstance(
+		// 	MadrassaApplication.getContext());
 
-		authHeader = repo.getAuthHeader();
-		httpClient = buildClient();		
+		// authHeader = repo.getAuthHeader();
+		this.authHeader = authHeader;
+		httpClient = buildClient();
 
 		retrofit = new Retrofit.Builder()
 			.baseUrl(BASE_URL)
