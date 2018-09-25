@@ -12,6 +12,7 @@ import com.madrassa.data.MadrassaRequest;
 import com.madrassa.response.AuthResponse;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.util.Constants;
 
 import io.reactivex.Single;
 import io.reactivex.Observable;
@@ -25,7 +26,10 @@ public class AppRepository{
 	private PreferenceHandler prefHandler;
 	private Context context;
 	private AuthRequest authRequest;
-	private MadrassaRequest madrassaRequest; // for authenticated requests.
+	// For authenticated requests.  
+	// It should be initialized, after a successful login. 
+	private MadrassaRequest madrassaRequest; 
+	public static final String TAG = Constants.LOG_TAG;
 
 
 	// Preferred way of constructing AppRepository.
@@ -41,8 +45,12 @@ public class AppRepository{
 		this.context = context;
 		prefHandler     = new PreferenceHandler();
 		authRequest     = new AuthRequest();
-		madrassaRequest = new MadrassaRequest(getAuthHeader());
-		Log.i("madrassa", getAuthHeader());
+		// getAuthHeader() == null -> before login
+		// madrassaRequest = new MadrassaRequest(getAuthHeader());
+	}
+
+	public String getUserName(){
+		return prefHandler.getUserName();
 	}
 
 	// Returns the ["x-auth-header"] stored in shared preferences.
@@ -63,6 +71,9 @@ public class AppRepository{
 	public void saveLoginPreferences(Map<String, String> loginPreferences){
 		// Log.i("madrassa", loginPreferences.toString());
 		prefHandler.putStringMap(loginPreferences);
+		// Initializing Authenticated users' request client, to insure the 
+		// existence of the authentication header from shared preferences
+		madrassaRequest = new MadrassaRequest(getAuthHeader());
 	}
 
 	public Single<AuthResponse> login(Map<String, String> credentials){

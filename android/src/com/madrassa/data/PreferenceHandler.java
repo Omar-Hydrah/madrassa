@@ -49,4 +49,8 @@ public class PreferenceHandler{
 		return sharedPreferences.getString(User.TOKEN_KEY, null);
 	}
 
+	public String getUserName(){
+		return sharedPreferences.getString(User.USERNAME_KEY, null);
+	}
+
 }

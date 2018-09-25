@@ -18,13 +18,16 @@ import android.view.Menu;
 import android.util.Log;
 
 import com.madrassa.model.User;
+import com.madrassa.AppRepository;
+import com.madrassa.util.Constants;
 
 public class MainActivity extends AppCompatActivity
 {
 	private CoordinatorLayout mainLayout;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
-    public static final String TAG = "madrassa";
+    private AppRepository repo;
+    public static final String TAG = Constants.LOG_TAG;
 
     /** Called when the activity is first created. */
     @Override
@@ -32,6 +35,12 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        repo = AppRepository.getInstance(getApplicationContext());
+        // Assume the user is logged-in
+        if(repo.getAuthHeader()!= null && repo.getUserName() != null ){
+            startActivity(new Intent(this, HomeActivity.class));
+        }
 
         mainLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
