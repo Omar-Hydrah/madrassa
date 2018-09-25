@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity
 	private CoordinatorLayout mainLayout;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
-    public static final String TAG = "activity";
+    public static final String TAG = "madrassa";
 
     /** Called when the activity is first created. */
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Check credentials from shared preferences
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        /*sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         // editor = sharedPrefs.edit(); 
         String username = sharedPrefs.getString(User.USERNAME_KEY, null);
         String password = sharedPrefs.getString(User.PASSWORD_KEY, null);
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(homeIntent);
             }
             
-        }
+        }*/
 
 
         fab.setOnClickListener(new View.OnClickListener(){
