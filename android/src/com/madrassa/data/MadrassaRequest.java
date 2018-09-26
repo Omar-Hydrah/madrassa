@@ -67,7 +67,7 @@ public class MadrassaRequest{
 				Request originalRequest = chain.request();
 
 				Request.Builder requestBuilder = originalRequest.newBuilder()
-					.header("x-auth-header", authHeader)
+					.header("x-auth-token", authHeader)
 					.header("User-Agent", USER_AGENT);
 
 				Request request = requestBuilder.build();
