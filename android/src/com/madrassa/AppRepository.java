@@ -45,6 +45,14 @@ public class AppRepository{
 		this.context = context;
 		prefHandler     = new PreferenceHandler();
 		authRequest     = new AuthRequest();
+
+		// Trying to avoid the side effect of returning null from:
+		// this.getCourseList() and this.getCourse()
+		String authHeader = getAuthHeader();
+		if(authHeader != null && getUserName() != null){
+			// authHeader should be set, after the user logs in.
+			madrassaRequest = new MadrassaRequest(authHeader);
+		}
 		// getAuthHeader() == null -> before login
 		// madrassaRequest = new MadrassaRequest(getAuthHeader());
 	}
@@ -73,6 +81,8 @@ public class AppRepository{
 		prefHandler.putStringMap(loginPreferences);
 		// Initializing Authenticated users' request client, to insure the 
 		// existence of the authentication header from shared preferences
+		// The application will loose track of this class, when opening the app
+		// as a logged-in user.
 		madrassaRequest = new MadrassaRequest(getAuthHeader());
 	}
 
@@ -85,10 +95,22 @@ public class AppRepository{
 	}
 
 	public Single<CourseListResponse> getCourseList(){
+		// madrassaRequest might throw NullPointerException, 
+		// if initialized before a successful login
+
+		// Also, throws NullPointerException, when trying to open the app as 
+		// a logged in user; if it's not initialized automatically in the
+		// constructor
+		if(madrassaRequest == null){
+			return null;
+		}
 		return madrassaRequest.getCourseList();
 	}
 
 	public Single<CourseResponse> getCourse(int id){
+		if(madrassaRequest == null){
+			return null;
+		}
 		return madrassaRequest.getCourse(id);
 	}
 }

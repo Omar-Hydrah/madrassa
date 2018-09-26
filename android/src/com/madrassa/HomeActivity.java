@@ -39,20 +39,13 @@ public class HomeActivity extends AppCompatActivity{
 		setContentView(R.layout.activity_home);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 		repo = AppRepository.getInstance(getApplicationContext());
 
-		// Show courses.
-		/*courses = new ArrayList<Course>(); 
-		courses.add(new Course(1, 1, "Omar", "Physics", 
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."));
-		courses.add(new Course(2, 2, "Ahmad", "Chemistry", 
-			"Welcome to the world of Chemistry"));
-		courses.add(new Course(3, 2, "Ahmad", "Astronomy", 
-			"Inspecting the universe around us"));*/
-
-		courseAdapter = new CourseAdapter(courses);
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		if(courses != null){
+			courseAdapter = new CourseAdapter(courses);
+		}
 		// recyclerView.setAdapter(courseAdapter);
 
 		final Observer<CourseListResponse> listObserver = 
@@ -73,6 +66,9 @@ public class HomeActivity extends AppCompatActivity{
 
 		courseListViewModel = ViewModelProviders.of(this)
 			.get(CourseListViewModel.class);
+			
+		courseListViewModel.getCourseList();
+
 		courseListViewModel.courseListResponse.observe(this, listObserver);
 	}
 
