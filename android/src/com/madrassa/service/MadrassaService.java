@@ -21,9 +21,9 @@ import com.madrassa.response.CourseListResponse;
 /* Request should be intercepted, and altered with the proper token */
 public interface MadrassaService{
 
-	@GET("/course")
+	@GET("/api/course")
 	Single<CourseListResponse> getCourseList();
 
-	@GET("/course/{id}")
+	@GET("/api/course/{id}")
 	Single<CourseResponse> getCourse(@Path("id") int id);
 }
