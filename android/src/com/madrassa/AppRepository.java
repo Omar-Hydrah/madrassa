@@ -80,6 +80,10 @@ public class AppRepository{
 		return authRequest.login(credentials);
 	}
 
+	public void logout(){
+		prefHandler.logout();
+	}
+
 	public Single<CourseListResponse> getCourseList(){
 		return madrassaRequest.getCourseList();
 	}

@@ -1,13 +1,14 @@
 package com.madrassa;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,15 +19,17 @@ import java.util.ArrayList;
 
 import com.madrassa.model.Course;
 import com.madrassa.model.User;
-
+import com.madrassa.viewmodel.CourseListViewModel;
+import com.madrassa.response.CourseListResponse;
+import com.madrassa.AppRepository;
 
 public class HomeActivity extends AppCompatActivity{
 
-	private SharedPreferences sharedPrefs;
-	private SharedPreferences.Editor prefsEditor;
 	private List<Course> courses;
 	private RecyclerView recyclerView;
-	private RecyclerView.Adapter adapter;
+	private RecyclerView.Adapter courseAdapter;
+	private CourseListViewModel courseListViewModel;
+	private AppRepository repo;
 	public static final String TAG = "madrassa";
 
 	@Override
@@ -37,21 +40,40 @@ public class HomeActivity extends AppCompatActivity{
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		prefsEditor = sharedPrefs.edit();
+		repo = AppRepository.getInstance(getApplicationContext());
 
 		// Show courses.
-		courses = new ArrayList<Course>(); 
+		/*courses = new ArrayList<Course>(); 
 		courses.add(new Course(1, 1, "Omar", "Physics", 
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."));
 		courses.add(new Course(2, 2, "Ahmad", "Chemistry", 
 			"Welcome to the world of Chemistry"));
 		courses.add(new Course(3, 2, "Ahmad", "Astronomy", 
-			"Inspecting the universe around us"));
+			"Inspecting the universe around us"));*/
 
-		adapter = new CourseAdapter(courses);
+		courseAdapter = new CourseAdapter(courses);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		recyclerView.setAdapter(adapter);
+		// recyclerView.setAdapter(courseAdapter);
+
+		final Observer<CourseListResponse> listObserver = 
+			new Observer<CourseListResponse>()
+		{
+			@Override
+			public void onChanged(@NonNull CourseListResponse listResponse){
+				courses = listResponse.getCourses();
+
+				if(courseAdapter == null){
+					courseAdapter = new CourseAdapter(courses);
+					recyclerView.setAdapter(courseAdapter);
+				}else{
+					courseAdapter.notifyDataSetChanged();
+				}
+			}
+		};
+
+		courseListViewModel = ViewModelProviders.of(this)
+			.get(CourseListViewModel.class);
+		courseListViewModel.courseListResponse.observe(this, listObserver);
 	}
 
 	
@@ -70,10 +92,8 @@ public class HomeActivity extends AppCompatActivity{
 		int id = item.getItemId();
 		switch(id){
 			case R.id.action_logout:
-				// Clear login credentials from saved preferences
-				prefsEditor.remove(User.USERNAME_KEY);
-				prefsEditor.remove(User.PASSWORD_KEY);
 
+				repo.logout();
 				Toast.makeText(this, "Logged out" , Toast.LENGTH_SHORT).show();
 
 				Intent loginIntent = new Intent(this, LoginActivity.class);

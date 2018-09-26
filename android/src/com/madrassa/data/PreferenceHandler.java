@@ -35,6 +35,17 @@ public class PreferenceHandler{
 		editor.commit();
 	}
 
+	public void logout(){
+		editor.remove(User.USERNAME_KEY);
+		editor.remove(User.TOKEN_KEY);
+		editor.remove(User.ROLE_KEY);
+		editor.remove(User.ID_KEY);
+		editor.remove(User.FIRST_NAME_KEY);
+		editor.remove(User.LAST_NAME_KEY);
+
+		editor.commit();
+	}
+
 	public void putString(String key, String value){
 		editor.putString(key, value);
 		editor.commit();
