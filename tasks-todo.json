@@ -24,6 +24,16 @@
 	"android": {
 		"response": [
 			"CoursesResponse should extend CourseResponse"
+		],
+		"activity":{ 
+			"HomeActivity": [
+				"Should implement a `My tests` menu option to display an activity",
+				"Should implement a `My courses` menu option to display an activity"
+			]
+		},
+		"AppRepository": [
+			"Figure out a way to handle AppRepository.madrassaRequest initialization",
+			"AppRepository.madrassaRequest is lost, when opening the app as a logged-in user"
 		]
 	}
 }
