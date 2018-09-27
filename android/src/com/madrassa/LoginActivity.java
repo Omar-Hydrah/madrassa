@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Button;
 import android.util.Log;
 
 import java.util.Map;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity{
 	private String baseUrl = "http://192.168.1.103/"; 
 	private final String userAgent = "Madrassa-Application";
 	private AppRepository repo;
+	private Button buttonLogin;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity{
 		
 		repo = AppRepository.getInstance(getApplicationContext());
 
+		buttonLogin = (Button) findViewById(R.id.button_login);
 	}
 
 	// Log-in the user to the home activity.
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity{
 
 		EditText inputUsername = (EditText) findViewById(R.id.username);
 		EditText inputPassword = (EditText) findViewById(R.id.password);
+		buttonLogin.setEnabled(false);
 
 		final String username = inputUsername.getText().toString().trim();
 		final String password = inputPassword.getText().toString().trim();
@@ -79,6 +83,7 @@ public class LoginActivity extends AppCompatActivity{
 			// Log.i(TAG, throwable.getMessage());
 			Toast.makeText(LoginActivity.this, "Error occurred", 
 				Toast.LENGTH_SHORT).show();
+			buttonLogin.setEnabled(true);
 		});
 
 	}
