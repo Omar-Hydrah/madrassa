@@ -27,6 +27,17 @@
           >
         </activity>
         <activity
+          android:name="CourseDetailActivity"
+          android:label="@string/activity_course_detail"
+          android:theme="@style/AppTheme"
+          android:parentActivityName="com.madrassa.HomeActivity"
+          >
+          <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.madrassa.HomeActivity"
+            />
+        </activity>
+        <activity
           android:name="LoginActivity"
           android:label="@string/activity_login"
           android:theme="@style/AppTheme"
