@@ -24,7 +24,6 @@ import java.util.List;
 public class CourseListViewModel extends AndroidViewModel{
 	public static final String TAG = "madrassa";
 	private AppRepository repo;
-	// public MutableLiveData<List<Course>> courses = new MutableLiveData<>();
 	public MutableLiveData<CourseListResponse> courseListResponse =
 		new MutableLiveData<CourseListResponse>();
 
@@ -32,6 +31,9 @@ public class CourseListViewModel extends AndroidViewModel{
 	public CourseListViewModel(@NonNull Application app){
 		super(app);
 		repo = AppRepository.getInstance(MadrassaApplication.getContext());
+		// call getCourseList(), to avoid having to reload the courseList
+		// when the activity restarts.
+		getCourseList();
 	}
 
 

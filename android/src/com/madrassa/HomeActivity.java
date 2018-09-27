@@ -43,33 +43,21 @@ public class HomeActivity extends AppCompatActivity{
 
 		repo = AppRepository.getInstance(getApplicationContext());
 
-		if(courses != null){
-			courseAdapter = new CourseAdapter(courses);
-		}
-		// recyclerView.setAdapter(courseAdapter);
-
-		final Observer<CourseListResponse> listObserver = 
-			new Observer<CourseListResponse>()
-		{
-			@Override
-			public void onChanged(@NonNull CourseListResponse listResponse){
-				courses = listResponse.getCourses();
-
-				if(courseAdapter == null){
-					courseAdapter = new CourseAdapter(courses);
-					recyclerView.setAdapter(courseAdapter);
-				}else{
-					courseAdapter.notifyDataSetChanged();
-				}
-			}
-		};
-
 		courseListViewModel = ViewModelProviders.of(this)
 			.get(CourseListViewModel.class);
-			
-		courseListViewModel.getCourseList();
 
-		courseListViewModel.courseListResponse.observe(this, listObserver);
+		courseListViewModel.courseListResponse.observe(this, 
+			courseListResponse ->
+		{
+			courses = courseListResponse.getCourses();
+			if(courseAdapter == null){
+				courseAdapter = new CourseAdapter(courses);
+				recyclerView.setAdapter(courseAdapter);
+			}else{
+				courseAdapter.notifyDataSetChanged();
+			}
+		});
+
 	}
 
 	
