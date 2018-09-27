@@ -28,13 +28,18 @@
 		"activity":{ 
 			"HomeActivity": [
 				"Should implement a `My tests` menu option to display an activity",
-				"Should implement a `My courses` menu option to display an activity"
+				"Should implement a `My courses` menu option to display an activity",
+				"Fix null teacher name in course list",
 			]
 		},
 		"AppRepository": [
 			"Figure out a way to handle AppRepository.madrassaRequest initialization",
 			"AppRepository.madrassaRequest is lost, when opening the app as a logged-in user",
 			"Throw new Exception if madrassaRequest is null, instead of returning null",
+		],
+		"data": [
+			"Enhance CourseListViewModel to return a LiveData<CourseListResponse>",
+			"CourseListViewModel reloads course list whenever the activity restarts"
 		]
 	}
 }
