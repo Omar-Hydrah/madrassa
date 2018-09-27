@@ -33,7 +33,8 @@
 		},
 		"AppRepository": [
 			"Figure out a way to handle AppRepository.madrassaRequest initialization",
-			"AppRepository.madrassaRequest is lost, when opening the app as a logged-in user"
+			"AppRepository.madrassaRequest is lost, when opening the app as a logged-in user",
+			"Throw new Exception if madrassaRequest is null, instead of returning null",
 		]
 	}
 }
