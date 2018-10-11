@@ -39,7 +39,8 @@
 		],
 		"data": [
 			"Enhance CourseListViewModel to return a LiveData<CourseListResponse>",
-			"CourseListViewModel reloads course list whenever the activity restarts"
+			"CourseListViewModel reloads course list whenever the activity restarts",
+			"Hanlde no network connection",
 		]
 	}
 }
