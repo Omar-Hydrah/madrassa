@@ -135,6 +135,7 @@ CourseController.allCourses = function() {
 	});
 };
 
+/* An alternative more detailed version of .allCourses() */
 CourseController.getCoursesDetails = function() {
 	/*
 	select 
@@ -146,7 +147,7 @@ CourseController.getCoursesDetails = function() {
 			on c.teacher_id = users.user_id
 	*/
 	return new Promise((resolve, reject)=>{
-		var query = "select c.course_id, c.title, c.description,";
+		var query = "select c.course_id as id, c.title, c.description,";
 		query += " date_format(c.created_at, '%Y') as year, "; 
 		query += " concat(users.first_name, ' ', users.last_name) as teacher ";
 		query += " from courses c left join users on c.teacher_id = users.user_id";

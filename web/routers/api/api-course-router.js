@@ -17,7 +17,7 @@ router.get("/", middleware.isAuthenticated, (req, res)=>{
 		courses: []
 	};
 
-	CourseController.allCourses().then((courses)=>{
+	CourseController.getCoursesDetails().then((courses)=>{
 		if(courses != null){
 			response.courses = courses;
 			response.success = true;
