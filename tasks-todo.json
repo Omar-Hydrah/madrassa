@@ -18,12 +18,16 @@
 				"problem": "when decoding an invalid json token, the error is displayed",
 				"solution": "fail silently, or log to record possible hack attempts"	
 			},
+		],
+		"models": [
+			"return courses' teachers to api/course/"
 		]
 	}
 	,
 	"android": {
 		"response": [
-			"CoursesResponse should extend CourseResponse"
+			"CoursesResponse should extend CourseResponse",
+			"LoginResponse should enable token renewal"
 		],
 		"activity":{ 
 			"HomeActivity": [
