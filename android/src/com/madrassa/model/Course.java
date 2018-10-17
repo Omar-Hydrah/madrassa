@@ -1,9 +1,9 @@
 package com.madrassa.model;
 
 public class Course{
-	private int courseId;
+	private int id;
 	private int teacherId;
-	private String teacherName;
+	private String teacher;
 	private String title;
 	private String description;
 	private Student[] students;
@@ -14,26 +14,26 @@ public class Course{
 		this.description = description;
 	}
 
-	public Course(int courseId, int teacherId, String teacherName, 
+	public Course(int id, int teacherId, String teacher, 
 		String title, String description)
 	{
-		this.courseId    = courseId;
+		this.id          = id;
 		this.teacherId   = teacherId;
-		this.teacherName = teacherName;
+		this.teacher = teacher;
 		this.title       = title;
 		this.description = description;
 	}
 
-	public Course(int courseId, int teacherId, String teacherName,
+	public Course(int id, int teacherId, String teacher,
 		String title, String description, Student[] students)
 	{
-		this(courseId, teacherId, teacherName, title, description);
+		this(id, teacherId, teacher, title, description);
 		this.students = students;
 	}
 
 
-	public int getCourseId() { return this.courseId; }
-	public void setCourseId(int courseId) { this.courseId = courseId; }
+	public int getId() { return this.id; }
+	public void setId(int id) { this.id = id; }
 	public int getTeacherId() { return this.teacherId; }
 	public void setTeacherId(int teacherId) { this.teacherId = teacherId; }
 	public String getTitle() { return this.title; }
@@ -52,15 +52,15 @@ public class Course{
 		}
 	public void setDescription(String description) 
 		{ this.description = description; }
-	public String getTeacherName(){return this.teacherName;}
-	public void setTeacherName(String name){this.teacherName = name;}
+	public String getTeacherName(){return this.teacher;}
+	public void setTeacherName(String name){this.teacher = name;}
 	public Student[] getStudents(){return this.students;}
 	public void setStudents(Student[] students){this.students = students;}
 
 	public String toString(){
 		return "{" + 
-			"courseId: "    + courseId + ", " +
-			"teacherName: " + teacherName + ", " +
+			"id: "    + id + ", " +
+			"teacherName: " + teacher + ", " +
 			"title: "       + title + ", " +
 			"description: " + description +
 			"}";

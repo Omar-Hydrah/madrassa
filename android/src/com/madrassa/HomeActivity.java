@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity{
 		{
 			courses = courseListResponse.getCourses();
 			if(courseAdapter == null){
-				courseAdapter = new CourseAdapter(courses);
+				courseAdapter = new CourseAdapter(this, courses);
 				recyclerView.setAdapter(courseAdapter);
 			}else{
 				courseAdapter.notifyDataSetChanged();
