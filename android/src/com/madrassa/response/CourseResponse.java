@@ -38,4 +38,20 @@ public class CourseResponse{
 	public Student[] getStudents(){return this.students;}
 	public void setStudents(Student[] students){this.students = students;}
 
+	public String toString(){
+		StringBuilder studentsJson = new StringBuilder();
+
+		if(this.students != null){
+			for(int i = 0; i < this.students.length; i++){
+				studentsJson.append(this.students[i].toString()); 
+				studentsJson.append(",");
+			}
+		}
+		return "{" + 
+			"message: " + this.message + ", " +
+			"success: " + this.success + ", " +
+			"course: "  + "'" + this.course.toString() + "'" + "," +
+			"students: " + studentsJson + 
+		"}";
+	}
 }

@@ -6,6 +6,7 @@ public class Course{
 	private String teacher;
 	private String title;
 	private String description;
+	private int year;
 	private Student[] students;
 
 	public Course(String title, String description){
@@ -25,10 +26,11 @@ public class Course{
 	}
 
 	public Course(int id, int teacherId, String teacher,
-		String title, String description, Student[] students)
+		String title, String description, Student[] students, int year)
 	{
 		this(id, teacherId, teacher, title, description);
 		this.students = students;
+		this.year = year;
 	}
 
 
