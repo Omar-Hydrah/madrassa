@@ -9,6 +9,7 @@ public class User{
 	private String role; // student - teacher - admin
 	private String firstName;
 	private String lastName;
+	private String name;
 	private String token; // jsonwebtoken - to be send with every request.
 	public static final String ID_KEY         = "id_key";
 	public static final String USERNAME_KEY   = "username_key";
@@ -31,6 +32,13 @@ public class User{
 		}else{
 			throw new IllegalArgumentException("Not an allowed user role");
 		}
+	}
+
+	public User(String username, String firstName, String lastName, String role){
+		this(username, null, role);
+		this.firstName = firstName;
+		this.lastName  = lastName;
+		this.name      = firstName + " " + lastName;
 	}
 
 	public void setId(int id){ this.id = id; }
@@ -58,13 +66,21 @@ public class User{
 	public void setLastName(String lastName){ this.lastName = lastName;}
 	public String getLastName(){ return this.lastName;}
 
+	public String getName(){return this.firstName + " " + this.lastName;}
+
 	public void setToken(String token){this.token = token;}
 	public String getToken(){return this.token;}
 
 	@Override
 	public String toString(){
-		return "{id: " + id + ",username: " + username + ",role:" + role +
-			",firstName: " + firstName + ",lastName:" + lastName  + "}";
+		return "{" +
+			"id:" + id + ", " + 
+			"username: " + username + ", "+
+			"name: " + name + ", " +
+			"firstName: " + firstName + ", " +
+			"lastName: " + lastName  + ", " +
+			"role" + role + ", " +
+		"}";
 	}
 
 	private boolean isValidRole(String role){
