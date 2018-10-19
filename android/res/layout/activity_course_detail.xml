@@ -6,12 +6,25 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context="com.madrassa.CourseDetailActivity"
+	android:padding="20dp"
 	>
 	
 	<TextView 
-		android:id="@+id/text_view"
+		android:id="@+id/text_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Course Detail"
+		android:text="Title"
+		android:textSize="18sp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		/>
+
+	<TextView 
+		android:id="@+id/text_description"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Description"
+		android:textSize="16sp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/text_title"
 		/>
 </android.support.constraint.ConstraintLayout>
