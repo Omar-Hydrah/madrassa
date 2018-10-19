@@ -144,7 +144,7 @@ router.get("/:courseId", (req, res)=>{
 			// Returned course is an array.
 			
 			// Fetching the students registered to this course.
-			CourseController.getCourseStudents(course[0].course_id)
+			CourseController.getCourseStudents(course[0].id)
 				.then((result)=>{
 					var students = result;
 					// result.message, result.students
@@ -154,7 +154,7 @@ router.get("/:courseId", (req, res)=>{
 					var userJoinedCourse = false;
 					if(req.session.user != null && students != null){
 						for(var i = 0; i < students.length; i++){
-							if(students[i].student_id == 
+							if(students[i].id == 
 								req.session.user.userId)
 							{
 								userJoinedCourse = true;

@@ -161,7 +161,7 @@ CourseController.getCoursesDetails = function() {
 
 CourseController.getCourse = function(courseId) {
 	return new Promise((resolve, reject)=>{
-		var query = "select c.course_id, c.teacher_id, c.title, c.description, "; 
+		var query = "select c.course_id as id, c.teacher_id as teacherId, c.title, c.description, "; 
 		query += " date_format(c.created_at, '%Y') as year,";
 		query += " concat(users.first_name, ' ', users.last_name) as teacher";
 		query += " from courses c left join users "; 
@@ -188,7 +188,7 @@ CourseController.getCourse = function(courseId) {
 
 CourseController.getCourseStudents = function(courseId) {
 	return new Promise((resolve, reject)=>{
-		var query = "select cs.student_id, cs.course_id, ";
+		var query = "select cs.student_id as id, cs.course_id, ";
 		query += " concat(u.first_name, ' ', u.last_name) as name";
 		query += " from course_students cs";
 		query += " left join courses c on c.course_id = cs.course_id";

@@ -4,10 +4,10 @@
 	<h3><%= course.title %> (<%= course.year %>)- by <%= course.teacher %></h3>
 
 	<% if(displayJoinLink){ %>
-		<a href="/course/<%= course.course_id %>/join-course">Join course</a>
+		<a href="/course/<%= course.id %>/join-course">Join course</a>
 			
 	<% }else if(displayLeaveLink){ %>
-		<a href="/course/<%= course.course_id %>/leave-course">Leave Course</a>
+		<a href="/course/<%= course.id %>/leave-course">Leave Course</a>
 	<% } %>
 	<p>Description:</p>
 	<p><%= course.description %></p>
