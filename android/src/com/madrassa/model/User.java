@@ -74,12 +74,12 @@ public class User{
 	@Override
 	public String toString(){
 		return "{" +
-			"id:" + id + ", " + 
+			"id: " + id + ", " + 
 			"username: " + username + ", "+
 			"name: " + name + ", " +
 			"firstName: " + firstName + ", " +
 			"lastName: " + lastName  + ", " +
-			"role" + role + ", " +
+			"role: " + role + ", " +
 		"}";
 	}
 
