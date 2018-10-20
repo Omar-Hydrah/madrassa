@@ -10,21 +10,52 @@
 	>
 	
 	<TextView 
-		android:id="@+id/text_title"
+		android:id="@+id/course_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Title"
-		android:textSize="18sp"
+		android:textSize="25sp"
 		app:layout_constraintLeft_toLeftOf="parent"
 		/>
 
 	<TextView 
-		android:id="@+id/text_description"
+		android:id="@+id/course_description"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Description"
-		android:textSize="16sp"
+		android:textSize="20sp"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/text_title"
+		app:layout_constraintTop_toBottomOf="@+id/course_title"
+		/>
+
+	<TextView 
+		android:id="@+id/header_registered_students"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/header_registered_students"
+		android:textSize="20sp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/course_description"
+		/>
+	<android.support.v7.widget.RecyclerView 
+		android:id="@+id/recycler_view"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/header_registered_students"
+		app:layout_constraintBottom_toTopOf="@+id/button_course"
+		/>
+		
+	<Button 
+		android:id="@+id/button_course"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/button_course"
+		android:onClick="handleClick"
+		android:background="@color/colorPrimary"
+		android:textColor="@android:color/white"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
 		/>
 </android.support.constraint.ConstraintLayout>

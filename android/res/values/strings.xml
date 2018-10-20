@@ -3,8 +3,17 @@
     <string name="app_name">Madrassa</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-    <string name="button_login">Login</string>
+    
     <string name="activity_login">Login</string>
     <string name="activity_home">Home</string>
     <string name="activity_course_detail">Course Detail</string>
+
+    <string name="header_registered_students">Registered Students</string>
+
+    <string name="placeholder_student_name">Student Name</string>
+
+    <string name="button_login">Login</string>
+    <string name="button_course">Course</string>
+    <string name="button_join_course">Join Course</string>
+    <string name="button_leave_course">Leave Course</string>
 </resources>
