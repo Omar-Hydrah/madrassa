@@ -189,6 +189,8 @@ CourseController.getCourse = function(courseId) {
 CourseController.getCourseStudents = function(courseId) {
 	return new Promise((resolve, reject)=>{
 		var query = "select cs.student_id as id, cs.course_id, ";
+		query += " u.username, u.first_name as firstName, "; 
+		query += " u.last_name as lastName, u.role,";
 		query += " concat(u.first_name, ' ', u.last_name) as name";
 		query += " from course_students cs";
 		query += " left join courses c on c.course_id = cs.course_id";
