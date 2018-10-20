@@ -1,4 +1,4 @@
-package com.madrassa;
+package com.madrassa.adapter;
 
 import android.content.Context;
 import android.content.Intent;

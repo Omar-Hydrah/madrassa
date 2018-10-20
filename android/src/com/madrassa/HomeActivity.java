@@ -22,6 +22,7 @@ import com.madrassa.model.User;
 import com.madrassa.viewmodel.CourseListViewModel;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.AppRepository;
+import com.madrassa.adapter.CourseAdapter;
 
 public class HomeActivity extends AppCompatActivity{
 
