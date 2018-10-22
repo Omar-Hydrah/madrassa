@@ -10,7 +10,8 @@
 		],
 		"controllers": [
 			"move the database logic into the models",
-			"handle routing"
+			"handle routing",
+			"return a student's registered courses for android apps"
 		],
 		"functions": [
 			{
@@ -31,9 +32,13 @@
 		],
 		"activity":{ 
 			"HomeActivity": [
-				"Should implement a `My tests` menu option to display an activity",
-				"Should implement a `My courses` menu option to display an activity",
-				"Fix null teacher name in course list",
+				"Implement a `My tests` menu option to display an activity",
+				"Implement a `My courses` menu option to display an activity",
+				"Display a student's number of registered courses",
+				"Allow creating a new course for teachers",
+			],
+			"CourseListActivity" :[
+				"Hide the join-course button from teachers"
 			]
 		},
 		"AppRepository": [
