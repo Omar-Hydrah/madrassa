@@ -33,7 +33,8 @@ public class CourseListViewModel extends AndroidViewModel{
 		repo = AppRepository.getInstance(MadrassaApplication.getContext());
 		// call getCourseList(), to avoid having to reload the courseList
 		// when the activity restarts.
-		// getCourseList();
+		// Log.i(TAG, "Initializing CourseListVM");
+		getCourseList();
 	}
 
 

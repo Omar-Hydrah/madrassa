@@ -50,8 +50,12 @@ public class CourseListActivity extends AppCompatActivity{
 			}
 		});
 
-		if(savedInstanceState == null){
-			courseListVM.getCourseList();
+		/*if(savedInstanceState == null){
+			// courseListVM.getCourseList();
+			Log.i(Constants.TAG, "new activity");
+		}else{
+			Log.i(Constants.TAG, "restored activity");
 		}
+		*/
 	}
 }
