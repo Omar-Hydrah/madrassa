@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity{
 		
 		setContentView(R.layout.activity_home);
 
-		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+		/*recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 		repo = AppRepository.getInstance(getApplicationContext());
@@ -57,15 +57,16 @@ public class HomeActivity extends AppCompatActivity{
 			}else{
 				courseAdapter.notifyDataSetChanged();
 			}
-		});
+		});*/
 
 	}
 
-	
-	// Allow joining courses.
+	public void openCourseListActivity(View view){
+		Intent courseListIntent = new Intent(this, CourseListActivity.class);
+		startActivity(courseListIntent);
+	}
 
-	// Create a new course for teachers.
-	// Prevent teachers from joining a course.
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		getMenuInflater().inflate(R.menu.menu_home, menu);

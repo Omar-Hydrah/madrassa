@@ -7,6 +7,7 @@
     <string name="activity_login">Login</string>
     <string name="activity_home">Home</string>
     <string name="activity_course_detail">Course Detail</string>
+    <string name="activity_course_list">Courses List</string>
 
     <string name="header_registered_students">Registered Students</string>
 
@@ -16,4 +17,5 @@
     <string name="button_course">Course</string>
     <string name="button_join_course">Join Course</string>
     <string name="button_leave_course">Leave Course</string>
+    <string name="button_view_course_list">View Courses</string>
 </resources>
