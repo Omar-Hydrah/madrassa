@@ -47,7 +47,7 @@ public class CourseDetailActivity extends AppCompatActivity{
 		courseViewModel.courseResponse.observe(this, courseResponse ->{
 			// Log.i(Constants.TAG, courseResponse.toString());
 			Course course = courseResponse.getCourse();
-			Log.i(Constants.TAG, courseResponse.toString());
+			// Log.i(Constants.TAG, courseResponse.toString());
 
 			setTitle(course.getTitle());
 			courseTitle.setText(course.getTitle());
@@ -69,11 +69,8 @@ public class CourseDetailActivity extends AppCompatActivity{
 		int courseId = getIntent().getIntExtra(Constants.COURSE_ID, 0);
 
 		if(savedInstanceState == null){
-			Log.i(Constants.TAG, "New Activity");
+			// Log.i(Constants.TAG, "New Activity");
 			courseViewModel.getCourse(courseId);
-		}else{
-			Log.i(Constants.TAG, "Restored Activity");
-			Log.i(Constants.TAG, "course id: " + courseId);
 		}
 
 	}
