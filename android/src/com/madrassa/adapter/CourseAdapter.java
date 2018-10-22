@@ -14,6 +14,8 @@ import java.util.List;
 import com.madrassa.util.Constants;
 import com.madrassa.model.Course;
 import com.madrassa.HomeActivity;
+import com.madrassa.CourseDetailActivity;
+import com.madrassa.R;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder>{
 	private List<Course> courses;
