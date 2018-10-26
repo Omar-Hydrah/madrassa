@@ -7,25 +7,33 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
+import com.madrassa.AppRepository;
+import com.madrassa.adapter.CourseAdapter;
+import com.madrassa.adapter.CourseItemClickListener;
 import com.madrassa.model.Course;
 import com.madrassa.model.User;
 import com.madrassa.viewmodel.CourseListViewModel;
 import com.madrassa.response.CourseListResponse;
-import com.madrassa.AppRepository;
-import com.madrassa.adapter.CourseAdapter;
 import com.madrassa.util.Constants;
 
-public class CourseListActivity extends AppCompatActivity{
+public class CourseListActivity extends AppCompatActivity 
+	implements CourseItemClickListener
+{
 
 	private RecyclerView recyclerView;
 	private CourseListViewModel courseListVM;
 	private CourseAdapter courseAdapter;
 	private AppRepository repo;
 	private List<Course> courses;
+	private boolean isFragmentAvailable;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -50,6 +58,10 @@ public class CourseListActivity extends AppCompatActivity{
 			}
 		});
 
+
+		ViewGroup fragmentContainer = 
+			(ViewGroup) findViewById(R.id.course_detail_fragment_container);
+		isFragmentAvailable = (fragmentContainer != null);
 		/*if(savedInstanceState == null){
 			// courseListVM.getCourseList();
 			Log.i(Constants.TAG, "new activity");
@@ -58,4 +70,32 @@ public class CourseListActivity extends AppCompatActivity{
 		}
 		*/
 	}
+
+	@Override
+	public void handleCourseItemClick(int courseId){
+		if(isFragmentAvailable){
+			Bundle extras = new Bundle();
+			extras.putInt(Constants.COURSE_ID, courseId);
+
+			
+			CourseDetailFragment fragment = new CourseDetailFragment();
+			fragment.setArguments(extras);
+
+			FragmentManager manager = getSupportFragmentManager();
+			manager.beginTransaction()
+				.replace(R.id.course_detail_fragment_container, 
+					fragment, Constants.FRAGMENT_COURSE_DETAIL)
+				.addToBackStack(null)
+				.commit();
+
+		}else{
+			Intent courseDetailIntent = 
+				new Intent(this, CourseDetailActivity.class);
+
+			courseDetailIntent.putExtra(Constants.COURSE_ID, courseId);
+
+			startActivity(courseDetailIntent);
+		}
+	}
+
 }

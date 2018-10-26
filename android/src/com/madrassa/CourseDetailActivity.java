@@ -3,6 +3,8 @@ package com.madrassa;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
@@ -36,43 +38,15 @@ public class CourseDetailActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_detail);
 
-		courseTitle       = (TextView) findViewById(R.id.course_title);
-		courseDescription = (TextView) findViewById(R.id.course_description);
-		recyclerView      = (RecyclerView) findViewById(R.id.recycler_view);
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		CourseDetailFragment fragment = new CourseDetailFragment();
+		fragment.setArguments(getIntent().getExtras());
 
-		courseViewModel = ViewModelProviders.of(this)
-			.get(CourseViewModel.class);
-
-		courseViewModel.courseResponse.observe(this, courseResponse ->{
-			// Log.i(Constants.TAG, courseResponse.toString());
-			Course course = courseResponse.getCourse();
-			// Log.i(Constants.TAG, courseResponse.toString());
-
-			setTitle(course.getTitle());
-			courseTitle.setText(course.getTitle());
-			courseDescription.setText(course.getDescription());
-
-			if(studentAdapter == null){
-
-				List<User> students = Arrays.asList(
-					courseResponse.getStudents());
-
-				studentAdapter = new StudentAdapter(students);
-
-				recyclerView.setAdapter(studentAdapter);
-			}else{
-				studentAdapter.notifyDataSetChanged();
-			}
-		});
-
-		int courseId = getIntent().getIntExtra(Constants.COURSE_ID, 0);
-
-		if(savedInstanceState == null){
-			// Log.i(Constants.TAG, "New Activity");
-			courseViewModel.getCourse(courseId);
-		}
-
+		FragmentManager manager = getSupportFragmentManager();
+		manager.beginTransaction()
+			.replace(R.id.course_detail_fragment_container, 
+				fragment, Constants.FRAGMENT_COURSE_DETAIL)
+			// .addToBackStack(null)
+			.commit();
 	}
 
 	public void handleClick(View view){

@@ -8,41 +8,19 @@
 	android:orientation="horizontal"
 	tools:context="com.madrassa.CourseListActivity"
 	>
-	<LinearLayout
+	<fragment 
+		android:id="@+id/fragment"
 		android:layout_width="0dp"
 		android:layout_weight="1"
 		android:layout_height="match_parent"
-		android:orientation="vertical"
-		android:padding="20dp"
-		>
-		<TextView 
-			android:id="@+id/text_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Courses Collection"
-			android:textSize="20sp"
-			/>
-		<android.support.v7.widget.RecyclerView 
-			android:id="@+id/recycler_view"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			/>
-			
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="0dp"
-		android:layout_weight="1"
-		android:layout_height="match_parent"
-		>
-		<TextView 
-			android:id="@+id/text_view"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Course Content"
-			android:textSize="20sp"
-			/>
-		
-	</LinearLayout>	
+		android:name="com.madrassa.CourseListFragment"
+		tools:layout="@layout/fragment_course_list"
+		/>
 	
+	<FrameLayout 
+		android:id="@+id/course_detail_fragment_container"
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="match_parent"
+		/>
 </LinearLayout>	

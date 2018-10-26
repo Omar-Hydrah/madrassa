@@ -7,4 +7,5 @@ public class Constants{
 	public static final String LOG_TAG    = "madrassa";
 	public static final String TAG    = "madrassa";
 	public static final String COURSE_ID  = "COURSE_ID";
+	public static final String FRAGMENT_COURSE_DETAIL = "fragment_course_detail";
 }
