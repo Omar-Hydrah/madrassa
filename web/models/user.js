@@ -155,9 +155,70 @@ module.exports = function(sequelize, DataTypes) {
 		});
 	};
 
+	User.findTeacher = function(teacherId) {
+		return new Promise((resolve, reject)=>{
+			var result = {
+				teacher: null,
+				message: ""
+			};
+
+			User.findById(teacherId, {raw :true}).then((teacher)=>{
+				if(teacher == null){
+					result.teacher = null;
+					result.message = "Teacher not found";
+					resolve(result);
+				}
+				if(teacher.role != null && teacher.role == "teacher"){
+					result.teacher = teacher;
+					result.teacher.password = null;
+					result.message = "success";
+					resolve(result);
+				}else{
+					result.teacher = null;
+					result.message = "Student is not a teacher"
+					resolve(result);
+				}
+			}).catch((err)=>{
+				throw err;
+			});
+		});
+	};
+
+	User.findStudent = function(studentId) {
+		return new Promise((resolve , reject)=>{
+			var result = {
+				student : null,
+				message : ""
+			};
+
+			User.findById(studentId, {raw: true}).then((student)=>{
+				if(student == null){
+					result.message = "Student not found"
+					resolve(result);
+					return;
+				}
+
+				if(student.role != null && student.role == "student"){
+					result.message = "success";
+					result.student = student;
+					result.student.password = null;
+					resolve(result);
+					return;
+				}else{
+					result.message = "Found a teacher, not a student";
+					resolve(result);
+					return;
+				}
+
+			}).catch((err)=>{
+				throw err;
+			});
+		});
+	};
+
 	User.prototype.verifyPassword = function(password){
 		return bcrypt.compareSync(password, this.password);
-	}
+	};
 
 	return User;
 };
