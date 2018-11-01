@@ -56,7 +56,13 @@ router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
 		// returns [course, students]
 
 		response.course   = Object.assign({}, values[0][0]);
-		response.students = values[1].map(student => Object.assign({}, student));
+		// Throws errors if there are no registered students.
+		// response.students = values[1].map(student => Object.assign({}, student));
+
+		if(values[1] != null){ // students from getCourseStudents()
+			response.students = values[1].map(
+				student => Object.assign({}, student));
+		}
 		response.success  = true;
 		response.message  = "success";
 
