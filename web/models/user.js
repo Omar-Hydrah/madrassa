@@ -100,6 +100,7 @@ module.exports = function(sequelize, DataTypes) {
 			if(result.errors.length != 0){
 				// return done(null, false, req.flash("registerMessage", errors));
 				resolve(result);
+				return;
 			}
 
 			User.create({	
@@ -118,10 +119,12 @@ module.exports = function(sequelize, DataTypes) {
 					result.flash.title = "registerMessage";
 					result.flash.content = "Failed to create the user";
 					resolve(result);
+					return;
 				}else{
 					// return done(null, user);
 					result.user = user;
 					resolve(result);
+					return;
 					// To send plain user data:
 					// return done(null, user.get({plain: true}));
 				}
@@ -144,6 +147,7 @@ module.exports = function(sequelize, DataTypes) {
 					result.flash.title = "registerMessage";
 					result.flash.content = "Errors array"
 					resolve(result);
+					return;
 			    }
 				
 				// return done(null, false, 
@@ -151,6 +155,7 @@ module.exports = function(sequelize, DataTypes) {
 				result.flash.title = "registerMessage";
 				result.flash.content = "Unknown registeration error";
 				resolve(result);
+				return;
 			});
 		});
 	};
@@ -159,27 +164,43 @@ module.exports = function(sequelize, DataTypes) {
 		return new Promise((resolve, reject)=>{
 			var result = {
 				teacher: null,
-				message: ""
+				message: "",
+				err: null
 			};
 
-			User.findById(teacherId, {raw :true}).then((teacher)=>{
+			User.findById(teacherId, {
+				raw :true,
+				attributes: [
+					["username"]
+					["user_id", "id"], ["first_name", "firstName"],
+					["last_name", "lastName"], ["created_at", "createdAt"],
+				] 
+			})
+			.then((teacher)=>{
 				if(teacher == null){
 					result.teacher = null;
 					result.message = "Teacher not found";
 					resolve(result);
+					return;
 				}
 				if(teacher.role != null && teacher.role == "teacher"){
 					result.teacher = teacher;
 					result.teacher.password = null;
+					delete result.teacher.password;
 					result.message = "success";
 					resolve(result);
+					return;
 				}else{
 					result.teacher = null;
 					result.message = "Student is not a teacher"
 					resolve(result);
+					return;
 				}
 			}).catch((err)=>{
-				throw err;
+				result.err = err;
+				result.message = "failure";
+				resolve(result);
+				return;
 			});
 		});
 	};
@@ -188,7 +209,8 @@ module.exports = function(sequelize, DataTypes) {
 		return new Promise((resolve , reject)=>{
 			var result = {
 				student : null,
-				message : ""
+				message : "",
+				err: null
 			};
 
 			User.findById(studentId, {raw: true}).then((student)=>{
@@ -211,7 +233,11 @@ module.exports = function(sequelize, DataTypes) {
 				}
 
 			}).catch((err)=>{
-				throw err;
+				// throw err;
+				result.err = err;
+				result.message = "failure";
+				resolve(result);
+				return;
 			});
 		});
 	};
