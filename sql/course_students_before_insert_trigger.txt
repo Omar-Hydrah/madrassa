@@ -1,0 +1,12 @@
+delimiter //
+create trigger course_students_before_insert
+before insert on course_students
+for each row
+begin 
+set @role = null;
+select role into @role from users where user_id = new.student_id;
+if @role != "student" then
+signal sqlstate "45000"
+set message_text = "A teacher can not join a course";
+end if;
+end ; //
