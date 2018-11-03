@@ -41,6 +41,13 @@ public class User{
 		this.name      = firstName + " " + lastName;
 	}
 
+	public User(int id, String username, String firstName, String lastName,
+		String role)
+	{
+		this(username, firstName, lastName, role);
+		this.id = id;
+	}
+
 	public void setId(int id){ this.id = id; }
 	public int getId(){ return this.id; }
 

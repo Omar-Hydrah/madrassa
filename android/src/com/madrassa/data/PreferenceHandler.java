@@ -46,6 +46,7 @@ public class PreferenceHandler{
 		editor.commit();
 	}
 
+
 	public void putString(String key, String value){
 		editor.putString(key, value);
 		editor.commit();
@@ -64,4 +65,21 @@ public class PreferenceHandler{
 		return sharedPreferences.getString(User.USERNAME_KEY, null);
 	}
 
+	public User getUser(){
+		int userId      = 
+			Integer.valueOf(sharedPreferences.getString(User.ID_KEY, null));
+
+		String username = sharedPreferences.getString(User.USERNAME_KEY, null);
+		String role     = sharedPreferences.getString(User.ROLE_KEY, null);
+		String firstName = 
+			sharedPreferences.getString(User.FIRST_NAME_KEY, null);
+		String lastName  = 
+			sharedPreferences.getString(User.LAST_NAME_KEY, null);
+		if(username == null){
+			return null;
+		}
+
+		User user = new User(userId, username, firstName, lastName, role);
+		return user;
+	}
 }

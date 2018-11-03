@@ -62,6 +62,10 @@ public class AppRepository{
 		return prefHandler.getUserName();
 	}
 
+	public User getUser(){
+		return prefHandler.getUser();
+	}
+
 	// Returns the ["x-auth-header"] stored in shared preferences.
 	public String getAuthHeader(){
 		return prefHandler.getAuthHeader();
