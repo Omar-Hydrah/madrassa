@@ -6,10 +6,9 @@
 		]
 		,
 		"routers": [
-			"reduce the code in router files, by moving the logic into the controllers"
+
 		],
 		"controllers": [
-			"move the database logic into the models",
 			"handle routing",
 			"return a student's registered courses for android apps"
 		],
@@ -21,7 +20,7 @@
 			},
 		],
 		"models": [
-			"return courses' teachers to api/course/"
+
 		]
 	}
 	,
@@ -39,7 +38,8 @@
 			],
 			"CourseListActivity" :[
 				"Hide the join-course button from teachers",
-				"An error is thrown when there are no students for a course."
+				"An error is thrown when there are no students for a course.",
+				"Handle addToBackStack() mess"
 			]
 		},
 		"AppRepository": [
