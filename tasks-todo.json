@@ -53,5 +53,8 @@
 			"CourseListViewModel reloads course list whenever the activity restarts",
 			"Hanlde no network connection",
 		]
-	}
+	},
+	"mysql": [
+		"Create CHECK and stored procedure to prevent students from creating courses."
+	]
 }
