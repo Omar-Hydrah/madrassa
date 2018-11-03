@@ -10,8 +10,9 @@ import com.madrassa.data.PreferenceHandler;
 import com.madrassa.data.AuthRequest;
 import com.madrassa.data.MadrassaRequest;
 import com.madrassa.response.AuthResponse;
-import com.madrassa.response.CourseListResponse;
+import com.madrassa.response.BooleanResponse;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.response.CourseListResponse;
 import com.madrassa.util.Constants;
 
 import io.reactivex.Single;
@@ -112,5 +113,13 @@ public class AppRepository{
 			return null;
 		}
 		return madrassaRequest.getCourse(id);
+	}
+
+	public Single<BooleanResponse> joinCourse(int courseId){
+		return madrassaRequest.joinCourse(courseId);
+	}
+
+	public Single<BooleanResponse> leaveCourse(int courseId){
+		return madrassaRequest.leaveCourse(courseId);
 	}
 }

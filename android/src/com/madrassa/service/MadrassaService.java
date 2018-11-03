@@ -17,6 +17,7 @@ import io.reactivex.Observable;
 
 import com.madrassa.response.CourseResponse;
 import com.madrassa.response.CourseListResponse;
+import com.madrassa.response.BooleanResponse;
 
 /* Request should be intercepted, and altered with the proper token */
 public interface MadrassaService{
@@ -26,4 +27,10 @@ public interface MadrassaService{
 
 	@GET("/api/course/{id}")
 	Single<CourseResponse> getCourse(@Path("id") int id);
+
+	@POST("/api/course/{id}/join-course")
+	Single<BooleanResponse> joinCourse(@Path("id") int id);
+
+	@POST("/api/course/{id}/leave-course")
+	Single<BooleanResponse> leaveCourse(@Path("id") int id);
 }

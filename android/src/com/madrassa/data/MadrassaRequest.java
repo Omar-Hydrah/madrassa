@@ -7,6 +7,7 @@ import com.madrassa.model.Student;
 import com.madrassa.model.Course;
 import com.madrassa.response.CourseListResponse;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.response.BooleanResponse;
 import com.madrassa.util.Constants;
 
 import okhttp3.Interceptor;
@@ -79,11 +80,19 @@ public class MadrassaRequest{
 		return client;
 	}
 
-	public Single<CourseResponse> getCourse(int id){
-		return service.getCourse(id);
+	public Single<CourseResponse> getCourse(int courseId){
+		return service.getCourse(courseId);
 	}
 
 	public Single<CourseListResponse> getCourseList(){
 		return service.getCourseList();
+	}
+
+	public Single<BooleanResponse> joinCourse(int courseId){
+		return service.joinCourse(courseId);
+	}
+
+	public Single<BooleanResponse> leaveCourse(int courseId){
+		return service.leaveCourse(courseId);
 	}
 }

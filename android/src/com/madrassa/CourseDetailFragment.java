@@ -28,6 +28,8 @@ public class CourseDetailFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private CourseViewModel courseVM; 
 	private CourseResponse courseResponse;
+	private Course     course;
+	private List<User> students; 
 	private TextView courseTitle;
 	private TextView courseDescription;
 	private StudentAdapter studentAdapter;
@@ -68,6 +70,8 @@ public class CourseDetailFragment extends Fragment {
 			courseTitle.setText(course.getTitle());
 			courseDescription.setText(course.getDescription());
 
+			this.course = course;
+
 			if(studentAdapter == null){
 				List<User> students = 
 					Arrays.asList(courseResponse.getStudents());
@@ -78,6 +82,18 @@ public class CourseDetailFragment extends Fragment {
 			}else{
 				studentAdapter.notifyDataSetChanged();
 			}
+		});
+
+		courseVM.joinCourseResponse.observe(this, joinCourseResponse ->{
+			String message  = joinCourseResponse.getMessage();
+			boolean success = joinCourseResponse.isSuccess();	
+			Toast.makeText(getContext(), message , Toast.LENGTH_SHORT).show();
+		});
+
+		courseVM.leaveCourseResponse.observe(this, leaveCourseResponse ->{
+			String message  = leaveCourseResponse.getMessage();
+			boolean success = leaveCourseResponse.isSuccess();
+			Toast.makeText(getContext(), message , Toast.LENGTH_SHORT).show();
 		});
 
 		Bundle args = getArguments();
@@ -98,4 +114,22 @@ public class CourseDetailFragment extends Fragment {
 		Toast.makeText(getContext(),"Registering in course" ,
 			Toast.LENGTH_SHORT).show();
 	}
+
+	public void handleJoinCourse(View view){
+		if(this.course == null){
+			return;
+		}
+
+		int courseId = course.getId();
+		courseVM.joinCourse(courseId);
+	}
+
+	public void displayJoinCourseButton(){
+
+	}
+
+	public void hideJoinCourseButton(){
+
+	}
+
 }
