@@ -1,0 +1,14 @@
+delimiter //
+set @role = null;
+delimiter //
+create trigger courses_before_insert
+before insert on courses
+for each row
+begin
+set @role = null;
+select role into @role from users where user_id = new.teacher_id;
+if @role not in ("admin", "teacher") then
+signal sqlstate "45000"
+set message_text = "A student can not create a course";
+end if;
+end; //

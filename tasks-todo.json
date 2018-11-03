@@ -55,6 +55,6 @@
 		]
 	},
 	"mysql": [
-		"Create CHECK and stored procedure to prevent students from creating courses."
+		
 	]
 }
