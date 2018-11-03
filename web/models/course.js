@@ -87,7 +87,7 @@ module.exports = function(sequelize, DataTypes) {
 
 			sequelize.query(query, {replacements: [courseId]})
 				.spread((course)=>{
-					console.log(course);
+					// console.log(course);
 					if(!course || course.length == 0 ){
 						result.message = "Course not found";
 						resolve(result);

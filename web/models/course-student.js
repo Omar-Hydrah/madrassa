@@ -54,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
 
 			sequelize.query(query, {replacements: [courseId]})
 				.spread((data)=>{
-					console.log(data);
+					// console.log(data);
 					if(!data || data.length == 0 ){
 						result.message = "fail";
 						resolve(result);
@@ -81,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
 			}, {
 				raw : plainData
 			}).then((courseStudent)=>{
-				console.log(courseStudent);
+				// console.log(courseStudent);
 				result.message = "success";
 				result.courseStudent = courseStudent.courseStudent.dataValues;
 				resolve(result);
@@ -117,9 +117,9 @@ module.exports = function(sequelize, DataTypes) {
 				// warningStatus: 0 }
 				console.log(res);
 				result.resultSetHeader = res;
-				result.affetedRows     = res.affectedRows;
+				result.affectedRows     = res.affectedRows;
 
-				if(res != null && res.affetedRows != null && 
+				if(res != null && res.affectedRows != null && 
 					res.affectedRows == 1)
 				{
 					result.message = "success";
