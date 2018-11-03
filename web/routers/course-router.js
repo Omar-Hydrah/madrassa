@@ -39,7 +39,7 @@ router.post("/create-course", middleware.isLoggedIn, (req, res)=>{
 				req.body.title, 
 				req.body.description)
 
-			.then((course)=>{
+			.then((result)=>{
 				req.flash("courseMessage", "Course created successfully.");
 				return res.redirect("/course/all");
 			}).catch((err)=>{
@@ -63,11 +63,17 @@ router.get("/:courseId/join-course/", middleware.isLoggedIn, (req, res)=>{
 		}
 
 		CourseController.joinCourse(
-			req.params.courseId, req.session.user.userId)
-			.then((courseStudent)=>{
-				if(!courseStudent){
+			req.session.user.userId, req.params.courseId)
+			.then((result)=>{
+				if(!result){
 					req.flash("courseMessage", "Failed to join course");
 					return res.redirect("/course/all");
+				}else if(result.err != null){
+					if(err.name == "SequelizeUniqueConstraintError"){
+						req.flash("courseMessage", 
+							"You are already registered in this course");
+						return res.redirect("/course/all");
+					}
 				}else{
 					req.flash("courseMessage", "Student joined course");
 					return res.redirect("/course/all");
@@ -96,8 +102,9 @@ router.get("/:courseId/leave-course", middleware.isLoggedIn, (req, res)=>{
 		res.redirect("/course/all");
 	}
 
-	CourseController.leaveCourse(req.params.courseId, req.session.user.userId)
+	CourseController.leaveCourse(req.session.user.userId, req.params.courseId)
 		.then((result)=>{
+			// console.log(result);
 			if(result.affectedRows == 1){
 				req.flash("courseMessage", "Student left course");
 			}else{
@@ -125,10 +132,10 @@ router.get("/all", (req, res)=>{
     // teacher: 'Hassan Ahmad' }
 
 	CourseController.getCoursesDetails()
-		.then((courses)=>{
+		.then((result)=>{
 			res.render("course/index", {
 				message: courseMessage,
-				courses: courses
+				courses: result.courses
 			});
 
 		}).catch((err)=>{
@@ -139,7 +146,67 @@ router.get("/all", (req, res)=>{
 });
 
 router.get("/:courseId", (req, res)=>{
-	CourseController.getCourse(req.params.courseId)
+	var responseData = {
+		course: null,
+		students: null,
+		displayJoinLink: false,
+		displayLeaveLink: false,
+		message: null
+	};
+
+	Promise.all([
+		CourseController.getCourse(req.params.courseId),
+		CourseController.getCourseStudents(req.params.courseId)
+	]).then((result)=>{
+		// result[courseResult, courseStudentsResult]
+		var course   = result[0].course;
+		var students = result[1].students;
+
+		if(course == null && result[0].message == "fail"){
+			console.log(result[0].err);
+			return res.render("course/course", responseData);
+		}
+
+		if(result[1].err != null && result[1].message == "fail"){
+			console.log(result[1].err);
+			res.render("course/course", responseData);
+		}
+
+		var userJoinedCourse = false;
+		if(req.session.user != null && students != null){
+			for(var i = 0; i < students.length; i++){
+				if(students[i].id == req.session.user.userId){
+					userJoinedCourse = true;
+				}
+			}
+		}
+		responseData.course   = course;
+		responseData.students = students;
+		responseData.displayJoinLink  = !userJoinedCourse;
+		responseData.displayLeaveLink = userJoinedCourse;
+
+		res.render("course/course", responseData);
+
+/*		res.render("course/course", {
+			course: course,
+			students: students,
+			displayJoinLink: !userJoinedCourse,
+			displayLeaveLink: userJoinedCourse,
+			message: (students == null || students.length == 0 ) 
+				? "No students registered yet" : null
+		});
+*/
+	}).catch((err)=>{
+		res.render("course/course", {
+			course: null,
+			students: null,
+			displayJoinLink: false,
+			displayLeaveLink: false,
+			message: err
+		});
+	});
+
+	/*CourseController.getCourse(req.params.courseId)
 		.then((course)=>{
 			// Returned course is an array.
 			
@@ -179,7 +246,7 @@ router.get("/:courseId", (req, res)=>{
 						course: null,
 						students: null,
 						displayJoinLink: false,
-						displayLeaveLinik: false,
+						displayLeaveLink: false,
 						message: err
 					});
 				});
@@ -193,7 +260,7 @@ router.get("/:courseId", (req, res)=>{
 				displayLeaveLink: false,
 				message: err
 			});
-		});
+		});*/
 });
 
 module.exports = router;
