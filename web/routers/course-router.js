@@ -187,15 +187,6 @@ router.get("/:courseId", (req, res)=>{
 
 		res.render("course/course", responseData);
 
-/*		res.render("course/course", {
-			course: course,
-			students: students,
-			displayJoinLink: !userJoinedCourse,
-			displayLeaveLink: userJoinedCourse,
-			message: (students == null || students.length == 0 ) 
-				? "No students registered yet" : null
-		});
-*/
 	}).catch((err)=>{
 		res.render("course/course", {
 			course: null,
@@ -205,62 +196,6 @@ router.get("/:courseId", (req, res)=>{
 			message: err
 		});
 	});
-
-	/*CourseController.getCourse(req.params.courseId)
-		.then((course)=>{
-			// Returned course is an array.
-			
-			// Fetching the students registered to this course.
-			CourseController.getCourseStudents(course[0].id)
-				.then((result)=>{
-					var students = result;
-					// result.message, result.students
-					// console.log("students", students);
-					
-					// To prevent a user from joining a course twice.
-					var userJoinedCourse = false;
-					if(req.session.user != null && students != null){
-						for(var i = 0; i < students.length; i++){
-							if(students[i].id == 
-								req.session.user.userId)
-							{
-								userJoinedCourse = true;
-							}
-						}					
-					}
-					
-					res.render("course/course", {
-						course: course[0],
-						students: students,
-						// if a user joined, don't display the join-course link.
-						displayJoinLink: !userJoinedCourse,
-						displayLeaveLink: true,
-						message: (students == null || students.length == 0 ) 
-							? "No students registered yet" : null
-				});
-					
-				// Failed to get students.
-				}).catch((err)=>{
-					console.log(err);
-					res.render("course/course", {
-						course: null,
-						students: null,
-						displayJoinLink: false,
-						displayLeaveLink: false,
-						message: err
-					});
-				});
-		// Failed to get course data.						
-		}).catch((err)=>{
-			console.log(err);
-			res.render("course/course", {
-				course: null,
-				students: null,
-				displayJoinLink: false,
-				displayLeaveLink: false,
-				message: err
-			});
-		});*/
 });
 
 module.exports = router;
