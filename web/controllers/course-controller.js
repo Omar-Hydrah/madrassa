@@ -7,214 +7,152 @@ var CourseStudent = sequelize.import("../models/course-student.js");
 var CourseController = {};
 
 // The user must have a role of a teacher
-CourseController.createCourse = function(userId, title, description, 
-	plainCourse = true) 
+CourseController.createCourse = function(teacherId, title, description, 
+	plainData = true) 
 {
 
 	return new Promise((resolve, reject)=>{
+		var result = {
+			course: null,
+			message: "",
+			err :null
+		};
 
-		User.findById(userId).then((user)=>{
+		Course.createCourse(teacherId, title, description, plainData)
+		.then((res)=>{
+			result.course  = res.course;
+			result.message = res.message;
+			result.err     = res.err;
+			resolve(result);
 
-			if(user == null){
-				reject(new Error("Teacher not found"));
-			}else{
-				// If the user is a teacher indeed, create the course.
-				if(user.role == "teacher" || user.role == "admin"){
-					Course.create({
-						teacher_id: user.user_id,
-						title: title,
-						description : description
-					}).then((course)=>{
-
-						// Only one success case.
-						if(plainCourse){
-							resolve(course.get({plain: true}));
-						}else{
-							resolve(course);
-						}
-
-					}).catch((err)=>{
-						// console.log(err);
-						reject(err);
-					});
-				}else{
-				// Otherwise, prevent the course creation.	
-					reject(new Error("A student can not create a new course"));
-				}
-			}
-			
 		}).catch((err)=>{
-			// console.log(err);
-			reject(err);
+			result.message = "fail";
+			resolve(result);
+			return;
 		});
-		
 	});
 }
 
 // The user must have a role of a student.
 // Should insert in `course_students` table.
-CourseController.joinCourse = function(courseId, userId) {
+CourseController.joinCourse = function(studentId, courseId, plainData = true) {
 
 	return new Promise((resolve, reject)=>{
-		var query = "select user_id from users "; 
-		query += " where user_id = ? and role = 'student'";
-		query += " union all select course_id from courses where course_id = ?";
-		sequelize.query(query, {replacements: [userId, courseId]})
-			.spread((result)=>{
-				// console.log(result);
-				if(result.length != 2){
-					// Either course or user was not found.
+		var result = {
+			courseStudent : null,
+			message       : "",
+			err           : null
+		};
 
-					var error = "The user is not a student,"; 
-					error += " or course cannot be found";
-					reject(new Error(error));
-					// console.log(error);
-
-				// }else if(result[0].user_id == userId 
-				// 	&& result[1].course_id == courseId)
-				// {
-
-				}else{
-					// reject(new Error("Unknown error"));
-					// sequelize.query("insert int")
-					CourseStudent.create({
-						student_id: userId, 
-						course_id: courseId
-					}, {
-						raw: true
-					}).then((courseStudent)=>{
-						// console.log(courseStudent.get({plain:true}));
-						resolve(courseStudent);
-					}).catch((err)=>{
-						// console.log(err.name);
-						reject(err);
-					});
-					// console.log("Registering a new user.");
-				}
-			});
-		
+		CourseStudent.joinCourse(studentId, courseId, plainData)
+		.then((res)=>{
+			result.courseStudent = res.courseStudent;
+			result.message       = res.mesage;
+			result.err           = res.err;
+			resolve(result);
+			return;
+		}).catch((err)=>{
+			result.message = "fail";
+			result.err = err;
+			resolve(err);
+			return;
+		});
 	});
-
 };
 
-CourseController.leaveCourse = function(courseId, studentId) {
+CourseController.leaveCourse = function(studentId, courseId, plainData = true) {
 	// Using the Model.destroy(), will cost 2 queries.
 	
-	return new Promise((resolve , reject)=>{
-		var query = "delete from course_students"; 
-		query += " where course_id = ? and student_id = ?";
-
-		sequelize.query(query, {replacements: [courseId, studentId]})
-			.spread((result)=>{	
-				// ResultSetHeader {
-				// fieldCount: 0,
-				// affectedRows: 1,
-				// insertId: 0,
-				// info: '',
-				// serverStatus: 2,
-				// warningStatus: 0 }
-				if(result != null && result.affectedRows == 1){
-
-					resolve(result);
-				}else{
-					reject(new Error("Failed to leave course."));
-				}
-			});
-		
-	});
-};
-
-CourseController.allCourses = function() {
 	return new Promise((resolve, reject)=>{
+		var result = {
+			affectedRows : 0,
+			message      : "",
+			err          : null
+		};
 
-		Course.findAll({raw: true}).then((courses)=>{
-			resolve(courses);
-		}).catch((err)=>{
-			reject(courses);
-		});
-	});
-};
-
-/* An alternative more detailed version of .allCourses() */
-CourseController.getCoursesDetails = function() {
-	/*
-	select 
-	c.course_id, c.title, c.description, 
-		date_format(c.created_at, "%Y") as year, 
-	concat(users.first_name, " ", users.last_name) as name
-	from courses c 
-		left join users
-			on c.teacher_id = users.user_id
-	*/
-	return new Promise((resolve, reject)=>{
-		var query = "select c.course_id as id, c.title, c.description,";
-		query += " date_format(c.created_at, '%Y') as year, "; 
-		query += " concat(users.first_name, ' ', users.last_name) as teacher ";
-		query += " from courses c left join users on c.teacher_id = users.user_id";
-
-		sequelize.query(query).spread((result)=>{
-			// TODO: it would raise an error if the sql command is misformatted. 
+		CourseStudent.leaveCourse(studentId, courseId, plainData)
+		.then((res)=>{
+			result.affectedRows = res.affectedRows;
+			result.message      = res.message;
+			result.err          = res.err;
 			resolve(result);
+			return;
+
+		}).catch((err)=>{
+			result.message = "fail";
+			result.err     = err;
+			resolve(result);
+			return;
 		});
 	});
-}
+};
+
+CourseController.getCoursesDetails = function() {
+	return new Promise((resolve, reject)=>{
+		var result = {
+			courses: null,
+			message: "",
+			err    : null
+		};
+
+		Course.getCourses().then((res)=>{
+			result.courses = res.courses;
+			result.message = res.message;
+			resolve(result);
+			return;
+		}).catch((err)=>{
+			result.message = "fail";
+			result.err     = err;
+			resolve(result);
+			return;
+		});
+	});
+};
 
 CourseController.getCourse = function(courseId) {
 	return new Promise((resolve, reject)=>{
-		var query = "select c.course_id as id, c.teacher_id as teacherId, c.title, c.description, "; 
-		query += " date_format(c.created_at, '%Y') as year,";
-		query += " concat(users.first_name, ' ', users.last_name) as teacher";
-		query += " from courses c left join users "; 
-		query += " on c.teacher_id = users.user_id where course_id = ? limit 1";
+		var result = {
+			course : null,
+			message: "",
+			err    : null
+		};
 
-		sequelize.query(query, {replacements: [courseId]})
-			.spread((result)=>{
-				if(!result || result.length == 0){
-					// reject(new Error("Course not found"));
-					resolve(null);
-				}
-				resolve(result);
-			});
+		Course.getCourse(courseId).then((res)=>{
+			result.course  = res.course;
+			result.message = res.message;
+			result.err     = res.err;
+			resolve(result);
+			return;
+		}).catch((err)=>{
+			result.message = "fail";
+			result.err     = err;
+			resolve(result);
+			return;
+		});
 	});
 };
 
-// select 
-// cs.student_id, cs.course_id, 
-// concat(u.first_name, ' ', u.last_name) as name, c.title 
-// from course_students cs 
-// 	left join courses c on c.course_id = cs.course_id 
-// 	left join users u on cs.student_id = u.user_id 
-// 	where cs.course_id = 5;
-
 CourseController.getCourseStudents = function(courseId) {
 	return new Promise((resolve, reject)=>{
-		var query = "select cs.student_id as id, cs.course_id, ";
-		query += " u.username, u.first_name as firstName, "; 
-		query += " u.last_name as lastName, u.role,";
-		query += " concat(u.first_name, ' ', u.last_name) as name";
-		query += " from course_students cs";
-		query += " left join courses c on c.course_id = cs.course_id";
-		query += " left join users u on cs.student_id = u.user_id";
-		query += " where cs.course_id = ?";
+		var result = {
+			students: null,
+			message : "",
+			err     : null
+		};
 
-		// @Result:
-		// TextRow {
-	    // student_id: 24,
-	    // course_id: 6,
-	    // name: 'ayman mohammad',
-	    // title: 'Philosophy' }
-		sequelize.query(query, {replacements: [courseId]})
-			.spread((data)=>{
-				if(!data || data.length == 0){
-					// Throws errors if there are no registered students!
-					// reject(new Error("Course not found"));
-					resolve(null);
-
-				}else{
-					resolve(data);
-				}
-			});
-		
+		CourseStudent.getCourseStudents(courseId)
+		.then((res)=>{
+			result.students = res.students;
+			result.message  = res.message;
+			result.err      = res.err;
+			resolve(result);
+			return;
+		}).catch((err)=>{
+			result.message = "fail";
+			result.err = err;
+			resolve(result);
+			return;
+		});
 	});
 };
 

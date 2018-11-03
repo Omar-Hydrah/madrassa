@@ -56,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
 				.spread((data)=>{
 					console.log(data);
 					if(!data || data.length == 0 ){
-						result.message = "Failed to get students";
+						result.message = "fail";
 						resolve(result);
 						return;
 					}
@@ -88,7 +88,7 @@ module.exports = function(sequelize, DataTypes) {
 			}).catch((err)=>{
 				// throw err;
 				console.log(err);
-				result.message = "error";
+				result.message = "fail";
 				result.err = err;
 				resolve(err);
 			});
@@ -99,6 +99,7 @@ module.exports = function(sequelize, DataTypes) {
 		return new Promise((resolve, reject)=>{
 			var result = {
 				resultSetHeader: null,
+				affectedRows   : 0,
 				message        : "",
 				err            : null
 			};
@@ -107,8 +108,6 @@ module.exports = function(sequelize, DataTypes) {
 			query += " where course_id = ? and student_id = ?";
 			sequelize.query(query, {replacements: [courseId, studentId]})
 			.spread((res)=>{
-				console.log(res);
-				result.resultSetHeader = res;
 				// ResultSetHeader {
 				// fieldCount: 0,
 				// affectedRows: 1,
@@ -116,14 +115,20 @@ module.exports = function(sequelize, DataTypes) {
 				// info: '',
 				// serverStatus: 2,
 				// warningStatus: 0 }
+				console.log(res);
+				result.resultSetHeader = res;
+				result.affetedRows     = res.affectedRows;
+
 				if(res != null && res.affetedRows != null && 
 					res.affectedRows == 1)
 				{
 					result.message = "success";
 					resolve(result);
+					return;
 				}else{
 					result.message = "fail";
 					resolve(result);
+					return;
 				}
 			});
 
