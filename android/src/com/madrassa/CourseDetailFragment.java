@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.Button;
+import android.util.Log;
 
 import java.util.List;
 import java.util.Arrays;
 
+import com.madrassa.AppRepository;
 import com.madrassa.util.Constants;
 import com.madrassa.viewmodel.CourseViewModel;
 import com.madrassa.response.CourseResponse;
@@ -30,10 +32,13 @@ public class CourseDetailFragment extends Fragment {
 	private CourseResponse courseResponse;
 	private Course     course;
 	private List<User> students; 
+	private User appUser;
 	private TextView courseTitle;
 	private TextView courseDescription;
 	private StudentAdapter studentAdapter;
 	private Button courseButton;
+	private boolean userJoinedCourse;
+	private AppRepository repo;
 
 	public CourseDetailFragment(){
 
@@ -50,32 +55,46 @@ public class CourseDetailFragment extends Fragment {
 	{
 		View view = inflater.inflate(R.layout.fragment_course_detail, container,
 			false);
+
 		
 		recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		courseTitle  = (TextView) view.findViewById(R.id.course_title);
+		courseButton = (Button) view.findViewById(R.id.button_course);
 		courseDescription = 
 			(TextView)view.findViewById(R.id.course_description);
-		courseButton = (Button) view.findViewById(R.id.button_course);
 
 		courseButton.setOnClickListener(v ->{
 			handleClick();
 		});
 
+		repo    = AppRepository.getInstance(getContext());
+		appUser = repo.getUser();
+		if(!appUser.getRole().equals("student")){
+			displayCourseButton(false);
+			Log.i(Constants.TAG, appUser.getRole());
+		}
+
 		courseVM = ViewModelProviders.of(this)
 			.get(CourseViewModel.class);
 
 		courseVM.courseResponse.observe(this, courseResponse -> {
+			List<User> students = Arrays.asList(courseResponse.getStudents());
 			Course course = courseResponse.getCourse();
 			courseTitle.setText(course.getTitle());
 			courseDescription.setText(course.getDescription());
 
 			this.course = course;
 
-			if(studentAdapter == null){
-				List<User> students = 
-					Arrays.asList(courseResponse.getStudents());
+			for (int i = 0; i < students.size(); i++ ) {
+				if(students.get(i).getId() == appUser.getId()){
+					this.userJoinedCourse = true;
+					// displayCourseButton(false);
+					displayLeaveCourseButton();
+				}
+			}
 
+			if(studentAdapter == null){
 				studentAdapter = new StudentAdapter(students);
 				recyclerView.setAdapter(studentAdapter);
 
@@ -111,8 +130,19 @@ public class CourseDetailFragment extends Fragment {
 
 
 	public void handleClick(){
-		Toast.makeText(getContext(),"Registering in course" ,
-			Toast.LENGTH_SHORT).show();
+		/*Toast.makeText(getContext(),"Registering in course" ,
+			Toast.LENGTH_SHORT).show();*/
+
+		if(this.course == null){
+			return;
+		}
+
+		int courseId = course.getId();
+		if(userJoinedCourse){
+			courseVM.leaveCourse(courseId);
+		}else{
+			courseVM.joinCourse(courseId);
+		}
 	}
 
 	public void handleJoinCourse(View view){
@@ -121,15 +151,24 @@ public class CourseDetailFragment extends Fragment {
 		}
 
 		int courseId = course.getId();
-		courseVM.joinCourse(courseId);
+		if(userJoinedCourse){
+			courseVM.leaveCourse(courseId);
+		}else{
+			courseVM.joinCourse(courseId);
+		}
 	}
 
-	public void displayJoinCourseButton(){
-
+	public void displayCourseButton(boolean display){
+		if(display){
+			courseButton.setVisibility(View.VISIBLE);
+		}else{
+			courseButton.setVisibility(View.INVISIBLE);
+		}
 	}
 
-	public void hideJoinCourseButton(){
-
+	public void displayLeaveCourseButton(){
+		displayCourseButton(true);
+		courseButton.setText(R.string.leave_course);
 	}
 
 }
