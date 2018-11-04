@@ -40,13 +40,14 @@
 				"Hide the join-course button from teachers",
 				"An error is thrown when there are no students for a course.",
 				"Handle addToBackStack() mess"
-			]
+			],
 		},
 		"AppRepository": [
 			"Figure out a way to handle AppRepository.madrassaRequest initialization",
 			"AppRepository.madrassaRequest is lost, when opening the app as a logged-in user",
 			"Throw new Exception if madrassaRequest is null, instead of returning null",
-			"AppRepository.logout() throws a null pointer exception when using an expired token"
+			"AppRepository.logout() throws a null pointer exception when using an expired token",
+			"Perhaps initializing AppRepository in HomeActivity might solve the problem"
 		],
 		"data": [
 			"Enhance CourseListViewModel to return a LiveData<CourseListResponse>",
