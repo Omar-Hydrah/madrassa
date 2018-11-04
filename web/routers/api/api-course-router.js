@@ -78,27 +78,70 @@ router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
 });
 
 router.post("/:courseId/join-course", middleware.isAuthenticated, (req, res)=>{
-	token = req.flash("decoded");
+	// decoded token
+	user = req.flash("decoded")[0];
+
 	var response = {
-		message: "Joining course",
+		message: "",
 		success: false
 	};
 
 	var courseId = req.params.courseId;
+	CourseController.joinCourse(user.userId, courseId)
+	.then((result)=>{
 
-	res.json(response);
+		if(result.message && result.message == "success" && 
+			result.courseStudent != null)
+		{
+			response.message = "Joined course";
+			response.success = true;
+			return res.json(response);
+		}else if(result.err && 
+			result.err.name == "SequelizeUniqueConstraintError")
+		{
+			response.message = "You have already joined this course";
+			response.success = false;
+			return res.json(response);
+		}else{
+			response.message = "Failed to join course";
+			response.success = false;
+			return res.json(response);
+		}
+	}).catch((err)=>{
+		console.log(err);
+		response.message = "Unknown error";
+		response.success = false;
+		return res.json(response);
+	});
+
 });
 
 router.post("/:courseId/leave-course", middleware.isAuthenticated, (req,res)=>{
-	token = req.flash("decoded");
+	// decoded token
+	user = req.flash("decoded")[0];
 	var response = {
 		message: "Leaving course",
 		success: false
 	};
 
 	var courseId = req.params.courseId;
-
-	return res.json(response);
+	CourseController.leaveCourse(user.userId, courseId)
+	.then((result)=>{
+		if(result.message && result.message == "success" && 
+			result.affectedRows > 0)
+		{
+			response.message = "success";
+			response.success = true;
+			return res.json(response);
+		}else{
+			response.message = "Failed to leave course";
+			return res.json(response);
+		}
+	}).catch((err)=>{
+		console.log(err);
+		response.message = "Unknown error";
+		return res.json(response);
+	});
 });
 
 

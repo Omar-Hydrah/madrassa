@@ -47,7 +47,7 @@ CourseController.joinCourse = function(studentId, courseId, plainData = true) {
 		CourseStudent.joinCourse(studentId, courseId, plainData)
 		.then((res)=>{
 			result.courseStudent = res.courseStudent;
-			result.message       = res.mesage;
+			result.message       = res.message;
 			result.err           = res.err;
 			resolve(result);
 			return;

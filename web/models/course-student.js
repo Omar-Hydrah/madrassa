@@ -81,16 +81,17 @@ module.exports = function(sequelize, DataTypes) {
 			}, {
 				raw : plainData
 			}).then((courseStudent)=>{
-				// console.log(courseStudent);
 				result.message = "success";
-				result.courseStudent = courseStudent.courseStudent.dataValues;
+				result.courseStudent = courseStudent.dataValues;
 				resolve(result);
+				return;
 			}).catch((err)=>{
 				// throw err;
-				console.log(err);
+				// console.log(Object.keys(err));
 				result.message = "fail";
 				result.err = err;
-				resolve(err);
+				resolve(result);
+				return;
 			});
 		});
 	};
@@ -115,7 +116,7 @@ module.exports = function(sequelize, DataTypes) {
 				// info: '',
 				// serverStatus: 2,
 				// warningStatus: 0 }
-				console.log(res);
+				// console.log(res);
 				result.resultSetHeader = res;
 				result.affectedRows     = res.affectedRows;
 
