@@ -17,11 +17,12 @@ router.get("/", middleware.isAuthenticated, (req, res)=>{
 		courses: []
 	};
 
-	CourseController.getCoursesDetails().then((courses)=>{
-		if(courses != null){
-			response.courses = courses;
+	CourseController.getCoursesDetails().then((result)=>{
+		if(result != null){
+			response.courses = result.courses;
 			response.success = true;
 			response.message = "All courses";
+			// console.log(response.courses);
 			return res.json(response);
 
 		}else{
@@ -45,7 +46,7 @@ router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
 		message: "",
 		success: false,
 		course: null,
-		students: null
+		students: []
 	};
 
 	Promise.all([
@@ -55,12 +56,11 @@ router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
 	.then((values)=>{
 		// returns [course, students]
 
-		response.course   = Object.assign({}, values[0][0]);
-		// Throws errors if there are no registered students.
-		// response.students = values[1].map(student => Object.assign({}, student));
+		response.course   = Object.assign({}, values[0].course);
 
-		if(values[1] != null){ // students from getCourseStudents()
-			response.students = values[1].map(
+		// students from getCourseStudents()
+		if(values[1] != null && values[1].students != null){ 
+			response.students = values[1].students.map(
 				student => Object.assign({}, student));
 		}
 		response.success  = true;
@@ -80,11 +80,25 @@ router.get("/:courseId", middleware.isAuthenticated, (req, res)=>{
 router.post("/:courseId/join-course", middleware.isAuthenticated, (req, res)=>{
 	token = req.flash("decoded");
 	var response = {
-		message: "",
+		message: "Joining course",
 		success: false
 	};
 
+	var courseId = req.params.courseId;
+
 	res.json(response);
+});
+
+router.post("/:courseId/leave-course", middleware.isAuthenticated, (req,res)=>{
+	token = req.flash("decoded");
+	var response = {
+		message: "Leaving course",
+		success: false
+	};
+
+	var courseId = req.params.courseId;
+
+	return res.json(response);
 });
 
 
