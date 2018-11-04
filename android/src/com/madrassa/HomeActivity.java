@@ -38,11 +38,11 @@ public class HomeActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_home);
+		repo = AppRepository.getInstance(getApplicationContext());
 
 		/*recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-		repo = AppRepository.getInstance(getApplicationContext());
 
 		courseListViewModel = ViewModelProviders.of(this)
 			.get(CourseListViewModel.class);
