@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.madrassa.model.Course;
 import com.madrassa.model.Student;
+import com.madrassa.model.User;
 import com.madrassa.data.PreferenceHandler;
 import com.madrassa.data.AuthRequest;
 import com.madrassa.data.MadrassaRequest;
