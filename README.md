@@ -1,5 +1,6 @@
 # Madrassa
----
+
+
 ##### Courses Management System for universities and schools, with Web and Android clients 
 
 Teachers and students can register to create and join courses respectively.
@@ -48,12 +49,13 @@ A user is stored in the database table with these columns:
 Passwords are hashed with the npm package; bcrypt-nodejs
 
 # Android Client
----
+
+
 There are 4 main activities in the Android client.
-    - **LoginActivity**
-    - **HomeActivity**
-    - **CourseListActivity** - Has a fragment for bigger screens.
-    - **CourseDetailActivity** - Managed by a fragment.
+     -  **LoginActivity**
+     -  **HomeActivity**
+     -  **CourseListActivity** - Has a fragment for bigger screens.
+     -  **CourseDetailActivity** - Managed by a fragment.
 
 The Android application relies on the MVVM (Model View ViewModel) architecture to handle its data.
 
