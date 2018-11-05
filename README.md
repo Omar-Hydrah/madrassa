@@ -52,10 +52,11 @@ Passwords are hashed with the npm package; bcrypt-nodejs
 
 
 There are 4 main activities in the Android client.
-     -  **LoginActivity**
-     -  **HomeActivity**
-     -  **CourseListActivity** - Has a fragment for bigger screens.
-     -  **CourseDetailActivity** - Managed by a fragment.
+
+    - **LoginActivity**
+    -  **HomeActivity**
+    -  **CourseListActivity** - Has a fragment for bigger screens.
+    -  **CourseDetailActivity** - Managed by a fragment.
 
 The Android application relies on the MVVM (Model View ViewModel) architecture to handle its data.
 
