@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,53 +19,57 @@ import com.madrassa.util.Constants;
 import com.madrassa.MadrassaApplication;
 
 
-public class CourseViewModel extends AndroidViewModel{
+public class CourseViewModel{
 
 	private AppRepository repo;
-	public MutableLiveData<CourseResponse> courseResponse = 
-		new MutableLiveData<CourseResponse>();
-	public MutableLiveData<BooleanResponse> joinCourseResponse = 
-		new MutableLiveData<BooleanResponse>();
-	public MutableLiveData<BooleanResponse> leaveCourseResponse =
-		new MutableLiveData<BooleanResponse>();
+	// public MutableLiveData<CourseResponse> courseResponse = 
+	// 	new MutableLiveData<CourseResponse>();
+	// public MutableLiveData<BooleanResponse> joinCourseResponse = 
+	// 	new MutableLiveData<BooleanResponse>();
+	// public MutableLiveData<BooleanResponse> leaveCourseResponse =
+	// 	new MutableLiveData<BooleanResponse>();
+	Single<CourseResponse> courseResponse;
+	Single<BooleanResponse> joinCourseResponse;
+	Single<BooleanResponse> leaveCourseResponse;
 
-
-	public CourseViewModel(@NonNull Application app){
-		super(app);
-		repo = AppRepository.getInstance(MadrassaApplication.getContext());
+	public CourseViewModel(Context context){
+		repo = AppRepository.getInstance(context);
 	}
 
-	public void getCourse(int id){
-		repo.getCourse(id)
-		.subscribeOn(Schedulers.io())
-		.observeOn(AndroidSchedulers.mainThread())
-		.subscribe(courseResponse -> {
-			// Log.i(Constants.TAG, courseResponse.toString());
-			this.courseResponse.postValue(courseResponse);
-		}, throwable -> {
-			Log.i(Constants.TAG, "Error occurred");
-		});
+	public Single<CourseResponse> getCourse(int id){
+		return repo.getCourse(id)
+			.subscribeOn(Schedulers.io());
+
+		// .observeOn(AndroidSchedulers.mainThread())
+		// .subscribe(courseResponse -> {
+		// 	// Log.i(Constants.TAG, courseResponse.toString());
+		// 	this.courseResponse.postValue(courseResponse);
+		// }, throwable -> {
+		// 	Log.i(Constants.TAG, "Error occurred");
+		// });
 	}
 
-	public void joinCourse(int courseId){
-		repo.joinCourse(courseId)
-		.subscribeOn(Schedulers.io())
-		.observeOn(AndroidSchedulers.mainThread())
-		.subscribe(booleanResponse ->{
-			this.joinCourseResponse.postValue(booleanResponse);
-		}, throwable ->{
-			Log.i(Constants.TAG, "Error occurred");
-		});
+	public Single<BooleanResponse> joinCourse(int courseId){
+		return repo.joinCourse(courseId)
+			.subscribeOn(Schedulers.io());
+
+		// .observeOn(AndroidSchedulers.mainThread())
+		// .subscribe(booleanResponse ->{
+		// 	this.joinCourseResponse.postValue(booleanResponse);
+		// }, throwable ->{
+		// 	Log.i(Constants.TAG, "Error occurred");
+		// });
 	}
 
-	public void leaveCourse(int courseId){
-		repo.leaveCourse(courseId)
-		.subscribeOn(Schedulers.io())
-		.observeOn(AndroidSchedulers.mainThread())
-		.subscribe(booleanResponse ->{
-			this.leaveCourseResponse.postValue(booleanResponse);
-		}, throwable ->{
-			Log.i(Constants.TAG, "Error occurred");
-		});
+	public Single<BooleanResponse> leaveCourse(int courseId){
+		return repo.leaveCourse(courseId)
+			.subscribeOn(Schedulers.io());
+
+		// .observeOn(AndroidSchedulers.mainThread())
+		// .subscribe(booleanResponse ->{
+		// 	this.leaveCourseResponse.postValue(booleanResponse);
+		// }, throwable ->{
+		// 	Log.i(Constants.TAG, "Error occurred");
+		// });
 	}
 }

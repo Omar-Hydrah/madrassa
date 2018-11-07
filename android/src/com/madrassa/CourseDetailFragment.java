@@ -13,6 +13,10 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.util.Log;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
+
 import java.util.List;
 import java.util.Arrays;
 
@@ -20,6 +24,7 @@ import com.madrassa.AppRepository;
 import com.madrassa.util.Constants;
 import com.madrassa.viewmodel.CourseViewModel;
 import com.madrassa.response.CourseResponse;
+import com.madrassa.response.BooleanResponse;
 import com.madrassa.model.Course;
 import com.madrassa.model.User;
 import com.madrassa.model.Student;
@@ -27,21 +32,41 @@ import com.madrassa.adapter.StudentAdapter;
 
 public class CourseDetailFragment extends Fragment {
 
-	private RecyclerView recyclerView;
+	private AppRepository repo;
 	private CourseViewModel courseVM; 
+	private Disposable courseDisposable;
 	private CourseResponse courseResponse;
-	private Course     course;
+	private Course     course; // that's displayed in this activity
 	private List<User> students; 
 	private User appUser;
+	private boolean userJoinedCourse;
+	private RecyclerView recyclerView;
+	private StudentAdapter studentAdapter;
 	private TextView courseTitle;
 	private TextView courseDescription;
-	private StudentAdapter studentAdapter;
 	private Button courseButton;
-	private boolean userJoinedCourse;
-	private AppRepository repo;
 
 	public CourseDetailFragment(){
 
+	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+
+		Bundle args = getArguments();
+		if(args != null){
+			int courseId = args.getInt(Constants.COURSE_ID, 0);
+			courseDisposable = courseVM.getCourse(courseId)
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(this::setCourse);
+		}
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		courseDisposable.dispose();
 	}
 
 	@Override
@@ -72,89 +97,28 @@ public class CourseDetailFragment extends Fragment {
 		appUser = repo.getUser();
 		if(!appUser.getRole().equals("student")){
 			displayCourseButton(false);
-			Log.i(Constants.TAG, appUser.getRole());
+			// Log.i(Constants.TAG, appUser.getRole());
 		}
+		courseVM = new CourseViewModel(getActivity());
 
-		courseVM = ViewModelProviders.of(this)
-			.get(CourseViewModel.class);
-
-		courseVM.courseResponse.observe(this, courseResponse -> {
-			List<User> students = Arrays.asList(courseResponse.getStudents());
-			Course course = courseResponse.getCourse();
-			courseTitle.setText(course.getTitle());
-			courseDescription.setText(course.getDescription());
-
-			this.course = course;
-
-			for (int i = 0; i < students.size(); i++ ) {
-				if(students.get(i).getId() == appUser.getId()){
-					this.userJoinedCourse = true;
-					// displayCourseButton(false);
-					displayLeaveCourseButton();
-				}
-			}
-
-			if(studentAdapter == null){
-				studentAdapter = new StudentAdapter(students);
-				recyclerView.setAdapter(studentAdapter);
-
-			}else{
-				studentAdapter.notifyDataSetChanged();
-			}
-		});
-
-		courseVM.joinCourseResponse.observe(this, joinCourseResponse ->{
-			String message  = joinCourseResponse.getMessage();
-			boolean success = joinCourseResponse.isSuccess();	
-			Toast.makeText(getContext(), message , Toast.LENGTH_SHORT).show();
-		});
-
-		courseVM.leaveCourseResponse.observe(this, leaveCourseResponse ->{
-			String message  = leaveCourseResponse.getMessage();
-			boolean success = leaveCourseResponse.isSuccess();
-			Toast.makeText(getContext(), message , Toast.LENGTH_SHORT).show();
-		});
-
-		Bundle args = getArguments();
-
-		if(args != null){
-
-			int courseId = args.getInt(Constants.COURSE_ID, 0);
-
-			if(savedInstanceState == null){
-				courseVM.getCourse(courseId);
-			}
-		}
 		return view;
 	}
 
 
 	public void handleClick(){
-		/*Toast.makeText(getContext(),"Registering in course" ,
-			Toast.LENGTH_SHORT).show();*/
-
 		if(this.course == null){
 			return;
 		}
 
 		int courseId = course.getId();
 		if(userJoinedCourse){
-			courseVM.leaveCourse(courseId);
+			courseVM.leaveCourse(courseId)
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(this::displayBooleanResponse);
 		}else{
-			courseVM.joinCourse(courseId);
-		}
-	}
-
-	public void handleJoinCourse(View view){
-		if(this.course == null){
-			return;
-		}
-
-		int courseId = course.getId();
-		if(userJoinedCourse){
-			courseVM.leaveCourse(courseId);
-		}else{
-			courseVM.joinCourse(courseId);
+			courseVM.joinCourse(courseId)
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(this::displayBooleanResponse);
 		}
 	}
 
@@ -169,6 +133,40 @@ public class CourseDetailFragment extends Fragment {
 	public void displayLeaveCourseButton(){
 		displayCourseButton(true);
 		courseButton.setText(R.string.leave_course);
+	}
+
+	private void displayBooleanResponse(BooleanResponse response){
+		String message  = response.getMessage();
+		boolean success = response.isSuccess();
+		Toast.makeText(getContext(), message , Toast.LENGTH_SHORT).show();
+	}
+
+	// Handles the observable subscribe operation
+	private void setCourse(CourseResponse courseResponse){
+
+		List<User> students = Arrays.asList(courseResponse.getStudents());
+		Course course = courseResponse.getCourse();
+		courseTitle.setText(course.getTitle());
+		courseDescription.setText(course.getDescription());
+
+		this.course = course;
+
+		if(studentAdapter == null){
+			studentAdapter = new StudentAdapter(students);
+			recyclerView.setAdapter(studentAdapter);
+
+		}else{
+			studentAdapter.notifyDataSetChanged();
+		}
+
+
+		for (int i = 0; i < students.size(); i++ ) {
+			if(students.get(i).getId() == appUser.getId()){
+				this.userJoinedCourse = true;
+				// displayCourseButton(false);
+				displayLeaveCourseButton();
+			}
+		}
 	}
 
 }
