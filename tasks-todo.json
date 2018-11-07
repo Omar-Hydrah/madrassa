@@ -41,6 +41,9 @@
 				"An error is thrown when there are no students for a course.",
 				"Handle addToBackStack() mess"
 			],
+			"CourseDetailFragment": [
+				"Extract User userApp to its own ViewModel"
+			]
 		},
 		"AppRepository": [
 			"Figure out a way to handle AppRepository.madrassaRequest initialization",
