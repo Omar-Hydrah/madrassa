@@ -42,7 +42,9 @@
 				"Handle addToBackStack() mess"
 			],
 			"CourseDetailFragment": [
-				"Extract User userApp to its own ViewModel"
+				"Extract User userApp to its own ViewModel",
+				"Disable course button (join/leave) after a click",
+				"Refresh the course's students list, when a user leaves or joins a course."
 			]
 		},
 		"AppRepository": [
