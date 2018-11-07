@@ -10,6 +10,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
+import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -21,32 +22,23 @@ import com.madrassa.response.CourseResponse;
 
 import java.util.List;
 
-public class CourseListViewModel extends AndroidViewModel{
+public class CourseListViewModel{
 	public static final String TAG = "madrassa";
+
 	private AppRepository repo;
-	public MutableLiveData<CourseListResponse> courseListResponse =
-		new MutableLiveData<CourseListResponse>();
+	public Single<CourseListResponse> courseListResponse;
 
 
-	public CourseListViewModel(@NonNull Application app){
-		super(app);
-		repo = AppRepository.getInstance(MadrassaApplication.getContext());
-		// call getCourseList(), to avoid having to reload the courseList
-		// when the activity restarts.
+	public CourseListViewModel(Context context){
+		repo = AppRepository.getInstance(context);
 		// Log.i(TAG, "Initializing CourseListVM");
-		getCourseList();
 	}
 
 
-	public void getCourseList(){
+	public Single<CourseListResponse> getCourseList(){
 
-		repo.getCourseList()
-		.subscribeOn(Schedulers.io())
-		.observeOn(AndroidSchedulers.mainThread())
-		.subscribe(listResponse ->{
-			courseListResponse.postValue(listResponse);
-		}, throwable ->{
-			Log.i(TAG, "Error occurred");
-		});
+		return repo.getCourseList()
+			.subscribeOn(Schedulers.io())
+			.observeOn(AndroidSchedulers.mainThread());
 	}
 }

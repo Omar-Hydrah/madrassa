@@ -20,9 +20,13 @@ import com.madrassa.adapter.CourseAdapter;
 import com.madrassa.adapter.CourseItemClickListener;
 import com.madrassa.model.Course;
 import com.madrassa.model.User;
-import com.madrassa.viewmodel.CourseListViewModel;
 import com.madrassa.response.CourseListResponse;
+import com.madrassa.viewmodel.CourseListViewModel;
 import com.madrassa.util.Constants;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class CourseListActivity extends AppCompatActivity 
 	implements CourseItemClickListener
@@ -34,41 +38,36 @@ public class CourseListActivity extends AppCompatActivity
 	private AppRepository repo;
 	private List<Course> courses;
 	private boolean isFragmentAvailable;
+	private Disposable courseListDisposable;
+
+	@Override
+	protected void onResume(){
+		super.onResume();
+		courseListDisposable = courseListVM.getCourseList()
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(this::setCourseList);
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		courseListDisposable.dispose();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_course_list);
 
-		courseListVM = ViewModelProviders.of(this)
-			.get(CourseListViewModel.class);
+		courseListVM = new CourseListViewModel(this);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-		repo = AppRepository.getInstance(getApplicationContext());
-				
-		courseListVM.courseListResponse.observe(this, courseListResponse ->{
-			courses = courseListResponse.getCourses();
-			if(courseAdapter == null){
-				courseAdapter = new CourseAdapter(this, courses);
-				recyclerView.setAdapter(courseAdapter);
-			}else{
-				courseAdapter.notifyDataSetChanged();
-			}
-		});
-
-
 		ViewGroup fragmentContainer = 
 			(ViewGroup) findViewById(R.id.course_detail_fragment_container);
 		isFragmentAvailable = (fragmentContainer != null);
-		/*if(savedInstanceState == null){
-			// courseListVM.getCourseList();
-			Log.i(Constants.TAG, "new activity");
-		}else{
-			Log.i(Constants.TAG, "restored activity");
-		}
-		*/
+
 	}
 
 	@Override
@@ -89,12 +88,24 @@ public class CourseListActivity extends AppCompatActivity
 				.commit();
 
 		}else{
+			// small screen
 			Intent courseDetailIntent = 
 				new Intent(this, CourseDetailActivity.class);
 
 			courseDetailIntent.putExtra(Constants.COURSE_ID, courseId);
 
 			startActivity(courseDetailIntent);
+		}
+	}
+
+	// Handles the Observable subscribe operation.
+	private void setCourseList(CourseListResponse courseListResponse){
+		courses = courseListResponse.getCourses();
+		if(courseAdapter == null){
+			courseAdapter = new CourseAdapter(this, courses);
+			recyclerView.setAdapter(courseAdapter);
+		}else{
+			courseAdapter.notifyDataSetChanged();
 		}
 	}
 
