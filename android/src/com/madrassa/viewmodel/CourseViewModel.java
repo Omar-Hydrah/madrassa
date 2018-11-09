@@ -11,6 +11,7 @@ import android.util.Log;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.Single;
+import io.reactivex.Observable;
 
 import com.madrassa.AppRepository; 
 import com.madrassa.response.CourseResponse;
@@ -25,6 +26,10 @@ public class CourseViewModel{
 	Single<CourseResponse> courseResponse;
 	Single<BooleanResponse> joinCourseResponse;
 	Single<BooleanResponse> leaveCourseResponse;
+
+	public CourseViewModel(AppRepository repo){
+		this.repo = repo;
+	}
 
 	public CourseViewModel(Context context){
 		repo = AppRepository.getInstance(context);
