@@ -109,6 +109,7 @@ public class CourseDetailFragment extends Fragment {
 		if(this.course == null){
 			return;
 		}
+		courseButton.setEnabled(false);
 
 		int courseId = course.getId();
 		if(userJoinedCourse){
