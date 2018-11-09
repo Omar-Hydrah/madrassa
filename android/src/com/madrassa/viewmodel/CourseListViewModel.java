@@ -38,7 +38,7 @@ public class CourseListViewModel{
 	public Single<CourseListResponse> getCourseList(){
 
 		return repo.getCourseList()
-			.subscribeOn(Schedulers.io())
-			.observeOn(AndroidSchedulers.mainThread());
+			.subscribeOn(Schedulers.io());
+			// .observeOn(AndroidSchedulers.mainThread());
 	}
 }
